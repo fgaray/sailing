@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BKS Exam Trainer</title>
+<meta name="description" content="Practice the ASA 101 Basic Keelboat written exam with adaptive flash-card style multiple choice questions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M30 6 L30 46 L10 46 Z' fill='%232457d6'/%3E%3Cpath d='M34 12 L34 46 L52 46 Z' fill='%23e8830c'/%3E%3Cpath d='M6 50 L58 50 L50 58 L14 58 Z' fill='%231d2433'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f5f3ee; --surface:#ffffff; --surface-2:#eeebe3; --ink:#1b2232; --ink-2:#465066; --muted:#737c90;
+  --line:#dcd6ca; --primary:#2457d6; --primary-2:#1c46ad; --primary-ink:#ffffff; --primary-soft:#e3eafb;
+  --accent:#e8830c; --accent-soft:#fcd9a8; --good:#1d8549; --good-bg:#e1f3e8; --bad:#c23b3b; --bad-bg:#fae6e6;
+  --sky:#f4f8fb; --water:#d6e8f4; --water-2:#b9d6ea; --hull:#ffffff; --hull-2:#e9e6de; --sail:#f2efe6; --sailT:#2457d6;
+  --red:#d2372b; --green:#1f8a4c; --orange:#e8710c; --focus:#ffb02e;
+  --shadow:0 1px 2px rgba(20,30,50,.06),0 6px 20px rgba(20,30,50,.06);
+  --radius:16px; --scale:1;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161f; --surface:#1b212d; --surface-2:#242b39; --ink:#eef1f7; --ink-2:#b7bfcf; --muted:#8a93a6;
+    --line:#2f3747; --primary:#6f9bff; --primary-2:#8cb0ff; --primary-ink:#0d1220; --primary-soft:#22304f;
+    --accent:#ffa53a; --accent-soft:#6b4415; --good:#4cc782; --good-bg:#17342a; --bad:#ff7a7a; --bad-bg:#3d1f24;
+    --sky:#18202c; --water:#1b3042; --water-2:#21405a; --hull:#2a3242; --hull-2:#343d4f; --sail:#2c3444; --sailT:#8cb0ff;
+    --red:#ff5a4d; --green:#3fcf7d; --orange:#ff8a2a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161f; --surface:#1b212d; --surface-2:#242b39; --ink:#eef1f7; --ink-2:#b7bfcf; --muted:#8a93a6;
+  --line:#2f3747; --primary:#6f9bff; --primary-2:#8cb0ff; --primary-ink:#0d1220; --primary-soft:#22304f;
+  --accent:#ffa53a; --accent-soft:#6b4415; --good:#4cc782; --good-bg:#17342a; --bad:#ff7a7a; --bad-bg:#3d1f24;
+  --sky:#18202c; --water:#1b3042; --water-2:#21405a; --hull:#2a3242; --hull-2:#343d4f; --sail:#2c3444; --sailT:#8cb0ff;
+  --red:#ff5a4d; --green:#3fcf7d; --orange:#ff8a2a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:calc(17px * var(--scale));-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;min-height:100vh}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:10px}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 120px}
+header.app{display:flex;align-items:center;gap:10px;padding:4px 0 14px}
+header.app h1{font-size:1.05rem;margin:0;font-weight:700;letter-spacing:.2px;flex:1;display:flex;align-items:center;gap:8px}
+.logo{width:26px;height:26px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.85rem;color:var(--ink-2);white-space:nowrap}
+.iconbtn{background:var(--surface);border:1px solid var(--line);border-radius:12px;width:40px;height:40px;display:inline-grid;place-items:center;cursor:pointer;font-size:1.05rem}
+.iconbtn:hover{border-color:var(--primary)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.hero h2{font-size:1.6rem;line-height:1.2;margin:0 0 6px}
+.hero p{margin:0 0 16px;color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 18px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:1.35rem;line-height:1.1}
+.stat span{font-size:.8rem;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:12px 18px;border-radius:14px;border:2px solid transparent;cursor:pointer;font-weight:700;font-size:1rem;transition:transform .08s ease,background .15s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--primary);color:var(--primary-ink)}
+.btn.primary:hover{background:var(--primary-2)}
+.btn.secondary{background:var(--surface);border-color:var(--line)}
+.btn.secondary:hover{border-color:var(--primary)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.kbd{display:inline-grid;place-items:center;min-width:1.5em;height:1.5em;padding:0 .35em;border-radius:6px;border:1px solid currentColor;font-size:.72em;opacity:.75;font-weight:700}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1 1 auto}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:700;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.section-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:26px 0 10px;font-weight:700}
+.topics{display:grid;gap:8px}
+.topic{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;cursor:pointer;text-align:left}
+.topic[aria-pressed="false"]{opacity:.5}
+.topic .ic{font-size:1.3rem;width:1.6em;text-align:center}
+.topic .nm{font-weight:700}
+.topic .bar{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden;margin-top:6px;display:flex}
+.topic .bar i{display:block;height:100%}
+.topic .bar .m{background:var(--good)}
+.topic .bar .l{background:var(--accent)}
+.topic .ct{font-size:.85rem;color:var(--muted)}
+.check{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;font-size:.8rem}
+.topic[aria-pressed="true"] .check{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+details.help{margin-top:12px}
+details.help summary{cursor:pointer;font-weight:700;padding:8px 0}
+details.help ul{padding-left:1.2em;color:var(--ink-2);margin:6px 0}
+details.help li{margin:4px 0}
+.legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* Question screen */
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.segs{flex:1;display:flex;gap:4px}
+.segs i{flex:1;height:8px;border-radius:8px;background:var(--surface-2);transition:background .3s}
+.segs i.ok{background:var(--good)} .segs i.no{background:var(--bad)} .segs i.cur{background:var(--primary)}
+.count{font-size:.85rem;color:var(--muted);min-width:3.5em;text-align:right;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;color:var(--ink-2);background:var(--surface-2);border-radius:999px;padding:4px 10px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.prompt{font-size:1.35rem;line-height:1.38;margin:4px 0 14px;font-weight:400}
+.prompt strong{font-weight:700;color:var(--primary)}
+.prompt blockquote{margin:10px 0 0;padding:10px 14px;border-left:4px solid var(--primary);background:var(--primary-soft);border-radius:0 10px 10px 0;font-size:1.1rem}
+.figure{margin:0 0 14px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.multi-note{font-size:.9rem;font-weight:700;color:var(--accent);margin:-6px 0 10px}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;text-align:left;width:100%;min-height:58px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);cursor:pointer;font-size:1.02rem;line-height:1.35;transition:border-color .15s,background .15s}
+.opt:hover:not([disabled]){border-color:var(--primary)}
+.opt .key{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--surface-2);font-weight:700;font-size:.9rem;color:var(--ink-2)}
+.opt .mark{font-weight:700;font-size:1.15rem;width:1.2em;text-align:center}
+.opt.sel{border-color:var(--primary);background:var(--primary-soft)}
+.opt.sel .key{background:var(--primary);color:var(--primary-ink)}
+.opt.ok{border-color:var(--good);background:var(--good-bg)}
+.opt.ok .key{background:var(--good);color:#fff}
+.opt.ok .mark{color:var(--good)}
+.opt.no{border-color:var(--bad);background:var(--bad-bg)}
+.opt.no .key{background:var(--bad);color:#fff}
+.opt.no .mark{color:var(--bad)}
+.opt.missed{border-color:var(--good);border-style:dashed}
+.opt.gone{opacity:.25;text-decoration:line-through}
+.opt[disabled]{cursor:default}
+#qcard:focus{outline:none}
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;animation:rise .25s ease-out}
+.fb.good{background:var(--good-bg);border:1px solid var(--good)}
+.fb.bad{background:var(--bad-bg);border:1px solid var(--bad)}
+.fb h3{margin:0 0 6px;font-size:1.1rem}
+.fb.good h3{color:var(--good)} .fb.bad h3{color:var(--bad)}
+.fb p{margin:6px 0}
+.fb .hook{background:var(--surface);border-radius:10px;padding:8px 12px;margin-top:10px}
+.fb .ref{font-size:.82rem;color:var(--muted);margin-top:8px}
+.actionbar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.actionbar .inner{max-width:720px;margin:0 auto;display:flex;gap:10px}
+.actionbar .btn{flex:1;min-height:54px;padding:10px}
+.btn.hard{background:var(--surface);border-color:var(--accent);color:var(--ink)}
+.btn.easy{background:var(--surface);border-color:var(--good);color:var(--ink)}
+.sub{display:block;font-size:.72rem;font-weight:400;opacity:.8}
+.btn .stack{display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;z-index:50;animation:toast 2.2s ease forwards;pointer-events:none;white-space:nowrap}
+.xp{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);font-weight:700;color:var(--good);animation:float 1s ease-out forwards;pointer-events:none;z-index:40}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:45}
+.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 1.4s ease-in forwards}
+
+/* Summary + break */
+.big{font-size:3rem;line-height:1;margin:4px 0 8px}
+.center{text-align:center}
+.breathe{width:160px;height:160px;border-radius:50%;margin:24px auto;background:radial-gradient(circle,var(--primary-soft),var(--primary));animation:breathe 8s ease-in-out infinite;display:grid;place-items:center;color:var(--primary-ink);font-weight:700}
+.miss{border-top:1px solid var(--line);padding:12px 0}
+.miss:first-child{border-top:0}
+.miss .q{font-weight:700}
+.miss .a{color:var(--good);margin-top:4px}
+.miss .y{color:var(--bad);font-size:.9rem}
+.settings label{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.settings label:last-child{border-bottom:0}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);max-width:440px;width:calc(100% - 32px);padding:20px;box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(10,14,22,.45)}
+dialog h2{margin:0 0 8px}
+
+/* Diagrams */
+.dia{width:100%;height:auto;display:block;max-height:44vh}
+.dia .sky{fill:var(--sky)} .dia .sea{fill:var(--water)} .dia .seaover{fill:var(--water-2);opacity:.45}
+.dia .hullshape{fill:var(--hull);stroke:var(--ink-2);stroke-width:2;stroke-linejoin:round}
+.dia .solid{fill:var(--hull-2);stroke:var(--ink-2);stroke-width:2;stroke-linejoin:round}
+.dia .wire{stroke:var(--ink-2);stroke-width:1.6;fill:none}
+.dia .line{stroke:var(--ink-2);stroke-width:1.6;fill:none;stroke-dasharray:4 3}
+.dia .spar{stroke:var(--ink);stroke-width:5;stroke-linecap:round;fill:none}
+.dia .sailfill{fill:var(--sail);stroke:none}
+.dia .edge{stroke:var(--ink-2);stroke-width:2;fill:none;stroke-linecap:round}
+.dia .deckline{stroke:var(--ink-2);stroke-width:2.5;fill:none}
+.dia .zone{fill:transparent;stroke:none}
+.dia .port{fill:var(--ink-2)}
+.dia .hl{stroke:var(--accent)!important;stroke-width:5!important}
+.dia .spar.hl{stroke-width:8!important}
+.dia .solid.hl,.dia .sailfill.hl{fill:var(--accent-soft)!important}
+.dia .zone.hl{fill:var(--accent)!important;fill-opacity:.35;stroke:var(--accent)!important;stroke-width:3!important}
+.dia .ring{fill:none;stroke:var(--accent);stroke-width:3;transform-box:fill-box;transform-origin:center;animation:pulse 1.4s ease-in-out infinite}
+.dia .hullT{fill:var(--hull);stroke:var(--ink);stroke-width:1.8;stroke-linejoin:round}
+.dia .hullM{fill:var(--hull-2);stroke:var(--ink);stroke-width:1.8;stroke-linejoin:round}
+.dia .boomT{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.dia .sailT{fill:none;stroke:var(--sailT);stroke-width:2.6;stroke-linecap:round}
+.dia .wake{stroke:var(--water-2);stroke-width:2.5;fill:none;stroke-linecap:round}
+.dia .speed{stroke:var(--muted);stroke-width:2;stroke-linecap:round}
+.dia .course{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 5;fill:none}
+.dia .badge{fill:var(--primary)} .dia .badgeT{fill:var(--primary-ink);font-weight:700;font-size:13px;text-anchor:middle;dominant-baseline:central}
+.dia .cap{fill:var(--ink-2);font-size:12px;text-anchor:middle;font-style:italic}
+.dia .windc{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.dia .winda{stroke:var(--primary);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dia .windt{fill:var(--primary);font-size:11px;font-weight:700;text-anchor:middle;letter-spacing:.08em}
+.dia .lbl{fill:var(--ink);font-size:13px;font-weight:700;text-anchor:middle}
+.dia .num{fill:#fff;font-size:20px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+.dia .bRed{fill:var(--red);stroke:rgba(0,0,0,.35);stroke-width:1.5}
+.dia .bGreen{fill:var(--green);stroke:rgba(0,0,0,.35);stroke-width:1.5}
+.dia .bWhite{fill:#fbfbf8;stroke:#8a8a80;stroke-width:1.5}
+.dia .bOrange{fill:var(--orange)}
+.dia .sym{fill:none;stroke:var(--orange);stroke-width:4;stroke-linejoin:round}
+.dia .shine{fill:#fff;opacity:.18}
+
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.12)}}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,-8px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@keyframes float{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-40px)}}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+@keyframes breathe{0%,100%{transform:scale(.72)}50%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}
+  .breathe{animation:none;transform:scale(.9)}
+}
+@media (max-width:480px){
+  .prompt{font-size:1.2rem}
+  .stats{grid-template-columns:repeat(3,1fr);gap:6px}
+  .stat b{font-size:1.15rem}
+  .hero h2{font-size:1.35rem}
+  header.app .pill.hide-sm{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="bar"></div>
+<dialog id="settings"></dialog>
+<script>
+"use strict";
+/* ================================================================
+   Helpers
+   ================================================================ */
+const $ = (s, el = document) => el.querySelector(s);
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+const strip = html => html.replace(/<\/?(strong|b|i|em)>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const rad = d => d * Math.PI / 180;
+const norm = a => { a = ((a % 360) + 540) % 360 - 180; return a === -180 ? 180 : a; };
+const f1 = n => Math.round(n * 10) / 10;
+const DAY = 864e5;
+
+/* ================================================================
+   Topics
+   ================================================================ */
+const TOPICS = [
+  { id: 'boat',    name: 'Boat parts',            icon: '⛵' },
+  { id: 'sail',    name: 'Sails & sail parts',    icon: '🔺' },
+  { id: 'gear',    name: 'Lines & hardware',      icon: '⚙️' },
+  { id: 'terms',   name: 'Sailing terms',         icon: '📖' },
+  { id: 'wind',    name: 'Wind & points of sail', icon: '🧭' },
+  { id: 'row',     name: 'Right of way',          icon: '⚖️' },
+  { id: 'nav',     name: 'Buoys & markers',       icon: '🛟' },
+  { id: 'safety',  name: 'Safety & float plans',  icon: '🦺' },
+  { id: 'signals', name: 'Sound signals & lights',icon: '📯' },
+  { id: 'knots',   name: 'Knots',                 icon: '🪢' },
+];
+const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
+
+/* ================================================================
+   Diagrams
+   ================================================================ */
+function svgWrap(inner, label, vb = '0 0 340 250') {
+  return `<svg class="dia" viewBox="${vb}" role="img" aria-label="${esc(label)}"><rect class="sea" x="-20" y="-20" width="400" height="300"/>${inner}</svg>`;
+}
+
+/* Side view of a sloop; `hl` = id of the part to highlight */
+function boatSide(hl) {
+  const c = (id, base) => `${base}${hl === id ? ' hl' : ''}`;
+  return `<svg class="dia" viewBox="0 0 400 345" role="img" aria-label="Side view of a sailboat with one part highlighted">
+  <rect class="sky" x="0" y="0" width="400" height="345"/>
+  <rect class="sea" x="0" y="266" width="400" height="79"/>
+  <path class="${c('keel', 'solid')}" d="M185,272 L242,272 L233,328 L201,328 Z"/>
+  <path class="${c('rudder', 'solid')}" d="M92,271 L113,272 L107,318 L96,316 Z"/>
+  <path class="hullshape" d="M58,240 L342,230 Q331,258 300,272 L100,274 Q70,268 58,240 Z"/>
+  <path class="${c('deck', 'deckline')}" d="M58,240 L342,230"/>
+  <path class="${c('cabin', 'solid')}" d="M150,236.8 L158,220 L252,218 L262,232.8 Z"/>
+  <circle class="port" cx="180" cy="227" r="2.6"/><circle class="port" cx="200" cy="226.6" r="2.6"/><circle class="port" cx="220" cy="226.2" r="2.6"/>
+  <path class="${c('mainsail', 'sailfill')}" d="M209,44 L207,191 L90,187 Q122,104 209,44 Z"/>
+  <path class="${c('jib', 'sailfill')}" d="M229,68 L326,219 L235,211 Q240,140 229,68 Z"/>
+  <path class="edge" d="M229,68 L326,219 L235,211 Q240,140 229,68"/>
+  <path class="${c('luff', 'edge')}" d="M209,46 L207,190"/>
+  <path class="${c('foot', 'edge')}" d="M207,190 L91,186"/>
+  <path class="${c('leech', 'edge')}" d="M90,187 Q122,104 209,44"/>
+  <g class="${c('battens', 'edge')}"><path d="M109,147 L132,154"/><path d="M136,110 L160,118"/><path d="M169,75 L188,81"/></g>
+  <path class="${c('toppinglift', 'line')}" d="M210,40 L87,189"/>
+  <path class="${c('backstay', 'wire')}" d="M210,40 L64,239"/>
+  <path class="${c('forestay', 'wire')}" d="M210,40 L336,231"/>
+  <g class="${c('shrouds', 'wire')}"><path d="M210,52 L203,140 L196,224"/><path d="M210,142 L188,225"/></g>
+  <path class="${c('mast', 'spar')}" d="M210,219 L210,38"/>
+  <path class="${c('spreaders', 'spar')}" d="M197,140 L223,140" style="stroke-width:4"/>
+  <path class="${c('boom', 'spar')}" d="M210,196 L86,191"/>
+  <circle class="${c('gooseneck', 'solid')}" cx="210" cy="196" r="4.5"/>
+  <path class="${c('vang', 'wire')}" d="M178,195 L207,216"/>
+  <path class="${c('mainsheet', 'wire')}" d="M98,192 L100,230"/>
+  <rect class="${c('traveler', 'solid')}" x="86" y="229" width="28" height="5" rx="2"/>
+  <path class="${c('tiller', 'spar')}" d="M78,236 L146,222" style="stroke-width:4"/>
+  <path class="${c('jibsheet', 'wire')}" d="M235,211 L150,222"/>
+  <rect class="${c('fairlead', 'solid')}" x="194" y="211.5" width="10" height="6" rx="2"/>
+  <rect class="${c('winch', 'solid')}" x="140" y="217" width="10" height="11" rx="3"/>
+  <path class="${c('lifelines', 'wire')}" d="M92,215 L308,208"/>
+  <g class="${c('lifelines', 'wire')}"><path d="M125,238 L125,214"/><path d="M280,232.5 L280,209"/></g>
+  <path class="${c('sternPulpit', 'wire')}" d="M61,240 L63,214 L92,214 L94,239" style="stroke-width:2.6"/>
+  <path class="${c('bowPulpit', 'wire')}" d="M306,231 L308,207 Q331,205 339,214 L341,230" style="stroke-width:2.6"/>
+  <ellipse class="${c('bow', 'zone')}" cx="322" cy="246" rx="26" ry="22"/>
+  <ellipse class="${c('stern', 'zone')}" cx="76" cy="252" rx="26" ry="20"/>
+  <circle class="${c('head', 'zone')}" cx="209" cy="47" r="10"/>
+  <circle class="${c('tack', 'zone')}" cx="207" cy="189" r="10"/>
+  <circle class="${c('clew', 'zone')}" cx="92" cy="186" r="10"/>
+  </svg>`;
+}
+
+function windBadge(w) {
+  return `<g><circle class="windc" cx="36" cy="36" r="24"/>
+    <g transform="translate(36 36) rotate(${f1(w)})"><path class="winda" d="M0,-14 L0,12 M-6,5 L0,12 L6,5"/></g>
+    <text class="windt" x="36" y="76">WIND</text></g>`;
+}
+
+/* Top view boat. h = heading (0 = up, clockwise), w = direction wind comes FROM */
+function boatTop({ x, y, h, w, label, type = 'sail', side = 1, speed = false }) {
+  const rel = norm(w - h);
+  let g = `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(h)}) scale(1.25)">`;
+  let sd = 1;
+  if (speed) g += `<path class="speed" d="M-14,30 L-14,46 M0,30 L0,52 M14,30 L14,46"/>`;
+  if (type === 'motor') {
+    g += `<path class="wake" d="M-9,24 L-18,44 M9,24 L18,44"/>`;
+    g += `<path class="hullM" d="M0,-26 C9,-20 11,-6 11,20 L-11,20 C-11,-6 -9,-20 0,-26 Z"/>`;
+    g += `<rect class="hullT" x="-6" y="-6" width="12" height="13" rx="2"/>`;
+  } else {
+    g += `<path class="hullT" d="M0,-28 C10,-18 12,0 10,21 L-10,21 C-12,0 -10,-18 0,-28 Z"/>`;
+    const a = Math.abs(rel);
+    sd = rel > 0 ? -1 : rel < 0 ? 1 : side;
+    if (a > 178) sd = side;
+    if (a < 32) {
+      g += `<path class="sailT" d="M0,-8 q4,4 0,7 q-4,4 0,7 q4,4 0,7 q-4,4 0,7"/>`;
+      g += `<path class="sailT" d="M0,-27 q3,3 0,5 q-3,3 0,5 q3,3 0,5"/>`;
+      g += `<path class="boomT" d="M0,-8 L0,19"/>`;
+    } else {
+      const b = rad(Math.min(85, Math.max(8, (a - 30) * 0.55 + 8)));
+      const L = 27, ex = sd * Math.sin(b) * L, ey = -8 + Math.cos(b) * L;
+      const mx = ex / 2, my = (-8 + ey) / 2;
+      const vx = ex, vy = ey + 8, vl = Math.hypot(vx, vy);
+      let nx = -vy / vl, ny = vx / vl; if (nx * sd < 0) { nx = -nx; ny = -ny; }
+      g += `<path class="sailT" d="M0,-8 Q${f1(mx + nx * 7)},${f1(my + ny * 7)} ${f1(ex)},${f1(ey)}"/>`;
+      g += `<path class="boomT" d="M0,-8 L${f1(ex)},${f1(ey)}"/>`;
+      const jx = sd * (2 + Math.sin(b) * 11), jy = -5;
+      g += `<path class="sailT" d="M0,-27 Q${f1(sd * (4 + Math.sin(b) * 9))},-17 ${f1(jx)},${jy}"/>`;
+    }
+    g += `<circle cx="0" cy="-8" r="2.4" fill="currentColor"/>`;
+  }
+  g += `</g>`;
+  if (label) {
+    const lx = type === 'motor' ? 30 : -sd * 31, ly = 2;
+    const cx = x + lx * Math.cos(rad(h)) - ly * Math.sin(rad(h));
+    const cy = y + lx * Math.sin(rad(h)) + ly * Math.cos(rad(h));
+    g += `<circle class="badge" cx="${f1(cx)}" cy="${f1(cy)}" r="10"/><text class="badgeT" x="${f1(cx)}" y="${f1(cy)}">${label}</text>`;
+  }
+  return g;
+}
+const dirv = h => [Math.sin(rad(h)), -Math.cos(rad(h))];
+const rotp = ([x, y], w) => [x * Math.cos(rad(w)) - y * Math.sin(rad(w)), x * Math.sin(rad(w)) + y * Math.cos(rad(w))];
+
+/* Build a scene in a "wind from the top" frame, then rotate it by w */
+function scene(boats, w, opts = {}) {
+  const C = [185, 128];
+  let inner = '';
+  const placed = boats.map(b => {
+    const [px, py] = rotp([b.x, b.y], w);
+    return { ...b, gx: C[0] + px, gy: C[1] + py, gh: b.h + w };
+  });
+  for (const b of placed) {
+    if (b.course) {
+      const [mx, my] = rotp(b.course, w);
+      inner += `<path class="course" d="M${f1(b.gx)},${f1(b.gy)} L${f1(C[0] + mx)},${f1(C[1] + my)}"/>`;
+    }
+  }
+  for (const b of placed) inner += boatTop({ x: b.gx, y: b.gy, h: b.gh, w, label: b.label, type: b.type, side: b.side, speed: b.speed });
+  for (const b of placed) if (b.caption) inner += `<text class="cap" x="${f1(b.gx)}" y="${f1(b.gy + 50)}">${esc(b.caption)}</text>`;
+  inner += windBadge(w);
+  return { svg: svgWrap(inner, opts.label || 'Diagram of boats with wind direction'), placed };
+}
+const tackOf = (h, w) => norm(w - h) > 0 ? 'starboard' : 'port';
+const sceneRot = () => Math.random() < 0.65 ? 0 : pick([90, 180, 270, rnd(360)]);
+
+/* Buoys */
+function can(x, y, num) {
+  return `<g><path class="bGreen" d="M${x - 22},${y - 30} L${x - 22},${y + 30} A22,7 0 0 0 ${x + 22},${y + 30} L${x + 22},${y - 30}"/>
+  <ellipse class="bGreen" cx="${x}" cy="${y - 30}" rx="22" ry="7"/><rect class="shine" x="${x - 16}" y="${y - 24}" width="6" height="50" rx="3"/>
+  <text class="num" x="${x}" y="${y + 4}">${num}</text></g>`;
+}
+function nun(x, y, num) {
+  return `<g><path class="bRed" d="M${x - 24},${y + 30} L${x - 24},${y + 2} L${x - 5},${y - 38} L${x + 5},${y - 38} L${x + 24},${y + 2} L${x + 24},${y + 30} A24,7 0 0 1 ${x - 24},${y + 30} Z"/>
+  <rect class="shine" x="${x - 18}" y="${y}" width="6" height="28" rx="3"/>
+  <text class="num" x="${x}" y="${y + 12}">${num}</text></g>`;
+}
+function channelScene(leftGreen) {
+  const water = `<rect class="sky" x="0" y="0" width="340" height="90"/><rect class="sea" x="0" y="90" width="340" height="160"/>
+    <path d="M0,90 L340,90" stroke="var(--line)" stroke-width="2"/>`;
+  const buoys = leftGreen ? can(85, 120, 3) + nun(255, 120, 4) : nun(85, 120, 4) + can(255, 120, 3);
+  const bow = `<path class="hullT" d="M120,252 Q150,214 170,196 Q190,214 220,252 Z"/><text class="cap" x="170" y="244">your bow</text>`;
+  return `<svg class="dia" viewBox="0 0 340 250" role="img" aria-label="Looking ahead from your boat: ${leftGreen ? 'green can 3 on the left, red nun 4 on the right' : 'red nun 4 on the left, green can 3 on the right'}">${water}${buoys}${bow}</svg>`;
+}
+function junctionBuoy() {
+  return `<svg class="dia" viewBox="0 0 340 250" role="img" aria-label="Lighted buoy: red top band, green middle band, red bottom">
+  <rect class="sky" x="0" y="0" width="340" height="170"/><rect class="sea" x="0" y="170" width="340" height="80"/>
+  <rect x="164" y="18" width="12" height="20" rx="3" fill="#fbfbf8" stroke="#8a8a80"/>
+  <rect class="bRed" x="146" y="38" width="48" height="44"/>
+  <rect class="bGreen" x="146" y="82" width="48" height="36"/>
+  <path class="bRed" d="M146,118 L194,118 L194,150 L146,150 Z"/>
+  <path d="M146,118 L194,150 M194,118 L146,150" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>
+  <ellipse class="bRed" cx="170" cy="168" rx="46" ry="18"/>
+  <text class="lbl" x="250" y="62" style="text-anchor:start">red</text>
+  <text class="lbl" x="250" y="104" style="text-anchor:start">green</text>
+  <text class="lbl" x="250" y="140" style="text-anchor:start">red</text>
+  <path d="M200,58 L244,58 M200,100 L244,100 M200,136 L244,136" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>
+  </svg>`;
+}
+function regBuoy(sym) {
+  const s = {
+    diamond: `<path class="sym" d="M170,92 L196,120 L170,148 L144,120 Z"/>`,
+    cross: `<path class="sym" d="M170,92 L196,120 L170,148 L144,120 Z"/><path class="sym" d="M152,102 L188,138 M188,102 L152,138" style="stroke-width:3.5"/>`,
+    circle: `<circle class="sym" cx="170" cy="120" r="24"/>`,
+    square: `<rect class="sym" x="146" y="97" width="48" height="46"/>`,
+  }[sym];
+  return `<svg class="dia" viewBox="0 0 340 250" role="img" aria-label="White buoy with orange bands and an orange ${sym} symbol">
+  <rect class="sky" x="0" y="0" width="340" height="190"/><rect class="sea" x="0" y="190" width="340" height="60"/>
+  <path class="bWhite" d="M126,52 L126,190 A44,10 0 0 0 214,190 L214,52"/>
+  <ellipse class="bWhite" cx="170" cy="52" rx="44" ry="10"/>
+  <rect class="bOrange" x="126" y="56" width="88" height="16"/>
+  <rect class="bOrange" x="126" y="168" width="88" height="16"/>
+  ${s}</svg>`;
+}
+
+/* ================================================================
+   Question bank
+   ref: {q: review question #, p: Sailing Made Easy page, h: handout page}
+   ================================================================ */
+const GROUPS = {
+  hull:     { topic: 'boat',  ask: t => `What is the **${t}**?`, rev: 'Which part of the boat is this?' },
+  rig:      { topic: 'boat',  ask: t => `What is the **${t}**?`, rev: 'Which part of the rig is this?' },
+  sailpart: { topic: 'sail',  ask: t => `On a sail, what is the **${t}**?`, rev: 'Which part of the sail is this?' },
+  sailtype: { topic: 'sail',  ask: t => `What is a **${t}**?`, rev: 'Which sail is this?' },
+  hardware: { topic: 'gear',  ask: t => `What is the function of the **${t}**?`, rev: 'Which piece of gear does this?' },
+  lines:    { topic: 'gear',  ask: t => `What is the function of the **${t}**?`, rev: 'Which line or control does this?' },
+  dock:     { topic: 'gear',  ask: t => `What are **${t}** used for?`, rev: 'What is described here?' },
+  dir:      { topic: 'terms', ask: t => `What does **${t}** mean?`, rev: 'Which term means this?' },
+  people:   { topic: 'terms', ask: t => `Who is the **${t}**?`, rev: 'Who is this?' },
+  rigging:  { topic: 'terms', ask: t => `What is **${t}**?`, rev: 'Which term is this?' },
+  move:     { topic: 'terms', ask: t => `What does **${t}** mean?`, rev: 'Which term is this?' },
+  knot:     { topic: 'knots', ask: t => `What is the **${t}** used for?`, rev: 'Which knot is used for this?' },
+  sound:    { topic: 'signals', ask: t => `What does **${t}** from another vessel mean?`, rev: 'Which sound signal means this?' },
+};
+const TERMS = [];
+const term = (group, id, name, def, extra = {}) => TERMS.push({ id, group, name, def, topic: GROUPS[group].topic, ...extra });
+
+// Q1 — boat parts
+term('hull', 'bow', 'Bow', 'The front (forward end) of the boat.', { part: 'bow', ref: { q: 1, p: 22 }, hook: 'Take a bow: you bend forward.' });
+term('hull', 'stern', 'Stern', 'The back (aft end) of the boat.', { part: 'stern', ref: { q: 1, p: 22 } });
+term('hull', 'deck', 'Deck', 'The top surface of the hull that you walk on.', { part: 'deck', ref: { q: 1, p: 22 } });
+term('hull', 'cabin', 'Cabin', 'The enclosed, sheltered living space inside the boat.', { part: 'cabin', ref: { q: 1, p: 22 } });
+term('hull', 'keel', 'Keel', 'The heavy, weighted fin under the hull that keeps the boat from tipping over and from slipping sideways.', { part: 'keel', ref: { q: 1, p: 22 } });
+term('hull', 'lifelines', 'Lifelines', 'Wires around the edge of the deck, held up by stanchions, that help keep the crew from falling overboard.', { part: 'lifelines', ref: { q: 1, p: 22 } });
+term('hull', 'bowPulpit', 'Bow pulpit', 'The rigid metal guardrail around the very front of the deck.', { part: 'bowPulpit', ref: { q: 1, p: 22 } });
+term('hull', 'sternPulpit', 'Stern pulpit', 'The rigid metal guardrail around the back of the deck.', { part: 'sternPulpit', ref: { q: 1, p: 22 }, hook: 'Also called the stern rail.' });
+term('hull', 'traveler', 'Traveler', 'A track running side to side across the boat that lets the bottom of the mainsheet slide over, adjusting the boom\'s angle.', { part: 'traveler', ref: { q: 1, p: 26 } });
+term('rig', 'mast', 'Mast', 'The tall vertical spar that holds up the sails and the boom.', { part: 'mast', ref: { q: 1, p: 24 } });
+term('rig', 'boom', 'Boom', 'The horizontal spar attached to the mast that holds the bottom edge (foot) of the mainsail.', { part: 'boom', ref: { q: 1, p: 24 }, hook: 'Duck when you hear "jibing!" or the boom will.' });
+term('rig', 'gooseneck', 'Gooseneck', 'The swivel fitting that joins the boom to the mast so it can swing side to side and up and down.', { part: 'gooseneck', ref: { q: 1, p: 24 } });
+term('rig', 'forestay', 'Headstay / Forestay', 'The wire from the bow to the top of the mast that keeps the mast from falling aft; the jib attaches to it.', { part: 'forestay', ref: { q: 1, p: 24 }, avoid: ['stays'] });
+term('rig', 'backstay', 'Backstay', 'The wire from the top of the mast to the stern that keeps the mast from falling forward.', { part: 'backstay', ref: { q: 1, p: 24 }, avoid: ['stays'] });
+term('rig', 'shroud', 'Shrouds', 'Wires that support the mast from the sides, keeping it from falling to port or starboard.', { part: 'shrouds', ref: { q: 1, p: 24 }, avoid: ['stays'], hook: 'Shrouds = sides. Stays = fore and aft.' });
+term('rig', 'spreader', 'Spreaders', 'Struts sticking out sideways from the mast that hold the shrouds out, giving them a better angle to support the mast.', { part: 'spreaders', ref: { q: 1, p: 24 } });
+
+// Q2 — sail parts
+term('sailpart', 'luff', 'Luff', 'The forward (leading) edge of a sail.', { part: 'luff', ref: { q: 2, p: 25 }, hook: 'The wind hits the luff first. It\'s also where the sail starts to shake ("luffing").' });
+term('sailpart', 'leech', 'Leech', 'The aft (trailing) edge of a sail.', { part: 'leech', ref: { q: 2, p: 25 }, hook: 'The leech is the edge Left behind.' });
+term('sailpart', 'foot', 'Foot', 'The bottom edge of a sail.', { part: 'foot', ref: { q: 2, p: 25 } });
+term('sailpart', 'head', 'Head', 'The top corner of a sail, where the halyard attaches.', { part: 'head', ref: { q: 2, p: 25 } });
+term('sailpart', 'tack', 'Tack', 'The lower forward corner of a sail.', { part: 'tack', ref: { q: 2, p: 25 }, hook: 'Tack is tucked in at the front, by the mast. Clew is at the back, where the sheets clip on.' });
+term('sailpart', 'clew', 'Clew', 'The lower aft corner of a sail, where the sheet or outhaul attaches.', { part: 'clew', ref: { q: 2, p: 25 } });
+term('sailpart', 'battens', 'Battens', 'Stiff strips slid into pockets along the back edge of the sail that help it hold its shape.', { part: 'battens', ref: { q: 2, p: 25 } });
+term('sailpart', 'boltrope', 'Bolt rope', 'Rope sewn into the luff (and sometimes the foot) of a sail that slides into a groove in the mast or boom.', { ref: { q: 2, p: 192 } });
+term('sailpart', 'hanks', 'Hanks', 'Clips along the luff of a jib that attach it to the forestay.', { ref: { q: 2, p: 52 } });
+term('sailtype', 'genoa', 'Genoa', 'A large headsail whose clew reaches aft past the mast, overlapping the mainsail.', { ref: { q: 26, p: 25 } });
+term('sailtype', 'mainsail', 'Mainsail', 'The sail attached along the back of the mast and along the boom.', { part: 'mainsail', ref: { q: 2, p: 25 } });
+term('sailtype', 'jib', 'Jib', 'A triangular headsail set in front of the mast on the forestay; a working one does not overlap the mast.', { part: 'jib', ref: { q: 2, p: 25 } });
+term('sailtype', 'spinnaker', 'Spinnaker', 'A large, lightweight, balloon-shaped sail used for sailing downwind.', { ref: { q: 2, p: 196 } });
+
+// Q3 / Q4 — functions
+term('hardware', 'cleat', 'Cleat', 'A fitting used to hold a line securely in place.', { ref: { q: 3, p: 27 } });
+term('hardware', 'blocks', 'Blocks', 'Pulleys that change the direction of a line and, combined, give mechanical advantage.', { ref: { q: 3, p: 27 }, ask: 'What do **blocks** do?' });
+term('hardware', 'tiller', 'Tiller / Wheel', 'What the helmsman uses to move the rudder and steer the boat.', { part: 'tiller', ref: { q: 3, p: 197 } });
+term('hardware', 'rudder', 'Rudder', 'The underwater blade at the stern that steers the boat by deflecting the water flowing past it.', { part: 'rudder', ref: { q: 3, p: 22 } });
+term('hardware', 'winch', 'Winch', 'A drum turned with a handle that gives mechanical advantage for pulling in heavily loaded lines.', { part: 'winch', ref: { q: 3, p: 26 } });
+term('hardware', 'fairlead', 'Fairlead', 'A fitting that guides a line at the correct angle, e.g. leading the jib sheet aft to the winch.', { part: 'fairlead', ref: { q: 3, p: 193 } });
+term('hardware', 'shackle', 'Shackle', 'A U-shaped metal fitting closed with a pin, used to attach a line to a sail or fitting.', { ref: { q: 3, p: 27 } });
+term('lines', 'halyard', 'Halyard', 'A line used to raise (hoist) and lower a sail.', { ref: { q: 3, p: 26 }, hook: 'Halyard = "haul yard": it hauls the sail up.' });
+term('lines', 'mainsheet', 'Mainsheet', 'The line, run through blocks, used to trim and ease the mainsail (pull the boom in or let it out).', { part: 'mainsheet', ref: { q: 3, p: 26 } });
+term('lines', 'jibsheet', 'Jib sheets', 'Lines tied to the clew of the jib, one on each side, used to trim and ease the jib.', { part: 'jibsheet', ref: { q: 3, p: 26 } });
+term('lines', 'toppinglift', 'Boom topping lift', 'A line from the top of the mast to the end of the boom that holds the boom up when the mainsail is lowered.', { part: 'toppinglift', ref: { q: 23, p: 26 }, hook: 'Without it, the boom drops into the cockpit (and onto heads).' });
+term('lines', 'outhaul', 'Outhaul', 'A line that pulls the clew aft along the boom to tighten the foot of the mainsail.', { ref: { q: 4, p: 47 } });
+term('lines', 'downhaul', 'Downhaul / Cunningham', 'A line that pulls down near the tack to tighten the luff of the sail.', { ref: { q: 4, p: 193 } });
+term('lines', 'vang', 'Boom vang', 'A tackle from the boom down to the base of the mast that keeps the boom from lifting.', { part: 'vang', ref: { q: 4, p: 26 } });
+term('lines', 'telltales', 'Telltales', 'Short pieces of yarn or ribbon on the sails that show how the air is flowing, so you can trim and steer.', { ref: { q: 4, p: 105 } });
+term('dock', 'fenders', 'Fenders', 'Cushions hung over the side to protect the hull from rubbing against a dock or another boat.', { ref: { q: 4, p: 193 } });
+term('dock', 'spring', 'Spring lines', 'Dock lines led diagonally forward and aft that stop the boat from moving ahead or astern along the dock.', { ref: { q: 4, p: 62 } });
+term('dock', 'breast', 'Breast lines', 'Dock lines run straight across from the boat to the dock that control how far the boat sits from the dock.', { ref: { q: 4, p: 62 } });
+
+// Q5 / Q8 / Q24–27 / Q35 — terms
+term('dir', 'windward', 'Windward', 'Toward the direction the wind is coming from (the upwind side).', { ref: { q: 5, p: 23 }, hook: 'WINDward is where the WIND comes from.' });
+term('dir', 'leeward', 'Leeward', 'Away from the wind; the downwind side.', { ref: { q: 5, p: 23 }, hook: 'Sailors say "LOO-ward". The lee side is sheltered from the wind.' });
+term('dir', 'port', 'Port', 'The left side of the boat when facing forward.', { ref: { q: 5, p: 23 }, hook: 'PORT and LEFT both have 4 letters. Port wine is red, like the port light.' });
+term('dir', 'starboard', 'Starboard', 'The right side of the boat when facing forward.', { ref: { q: 5, p: 23 }, hook: 'Starboard is Right; its light is green.' });
+term('dir', 'ahead', 'Ahead', 'Out in front of the boat, beyond the bow.', { ref: { q: 5, p: 23 } });
+term('dir', 'astern', 'Astern', 'Out behind the boat, beyond the stern.', { ref: { q: 5, p: 23 } });
+term('dir', 'abeam', 'Abeam', 'Off to the side of the boat, at a right angle (90°) to its centerline.', { ref: { q: 5, p: 23 } });
+term('dir', 'forward', 'Forward', 'Toward the bow, the front part of the boat.', { ref: { q: 5, p: 24 } });
+term('dir', 'aft', 'Aft', 'Toward the stern, the back part of the boat.', { ref: { q: 5, p: 23 } });
+term('dir', 'beam', 'Beam', 'The widest part of the boat (its width).', { ref: { q: 5, p: 21 } });
+term('people', 'helmsman', 'Helmsman', 'The person who steers the boat.', { ref: { q: 5, p: 194 } });
+term('people', 'crew', 'Crew', 'The people who help sail the boat, trimming sails and handling lines under the skipper\'s direction.', { ref: { q: 5, p: 60 } });
+term('people', 'skipper', 'Skipper', 'The person in charge of the boat, responsible for the boat and the safety of everyone aboard.', { ref: { q: 5, p: 60 } });
+term('rigging', 'running', 'Running rigging', 'The lines that move to adjust the sails, such as halyards, sheets, outhaul and vang.', { ref: { q: 25, p: 26 }, hook: 'Running rigging runs (moves). Standing rigging just stands there.' });
+term('rigging', 'standing', 'Standing rigging', 'The fixed wires (forestay, backstay and shrouds) that hold the mast up.', { ref: { q: 24, p: 24 }, avoid: ['stays'] });
+term('rigging', 'stays', 'Stays', 'Wires that support the mast fore and aft, such as the forestay and the backstay.', { ref: { q: 4, p: 196 }, avoid: ['standing', 'forestay', 'backstay', 'shroud'] });
+term('move', 'tacking', 'Tacking / Coming about', 'Changing direction by turning the bow through the wind, so the sails switch sides.', { ref: { q: 5, p: 88 } });
+term('move', 'jibing', 'Jibing', 'Changing direction by turning the stern through the wind, so the boom swings across the boat.', { ref: { q: 5, p: 92 } });
+term('move', 'bythelee', 'Sailing by-the-lee', 'Sailing downwind with the wind coming over the same side the boom is on, so an accidental jibe is likely.', { ref: { q: 35, p: 94 } });
+term('move', 'heel', 'Heel / Heeling', 'The sideways lean of the boat caused by the wind pushing on the sails.', { ref: { q: 27, p: 194 } });
+term('move', 'luffing', 'Luffing', 'The flapping or shaking of a sail because it is let out too far or the boat is pointed too close to the wind.', { ref: { q: 8, p: 195 } });
+term('move', 'stbdtack', 'Starboard tack', 'Sailing with the wind coming over the starboard side; the boom is out on the port side.', { ref: { q: 8, p: 196 } });
+term('move', 'porttack', 'Port tack', 'Sailing with the wind coming over the port side; the boom is out on the starboard side.', { ref: { q: 8, p: 196 } });
+term('move', 'headup', 'Heading up', 'Turning the boat toward the wind.', { ref: { q: 8, p: 194 } });
+term('move', 'bearaway', 'Bearing away / Falling off', 'Turning the boat away from the wind.', { ref: { q: 8, p: 192 } });
+
+// Q34 — knots
+term('knot', 'square', 'Square (reef) knot', 'Tying sail ties or reef points around a furled or reefed sail, joining two ends of the same line.', { ref: { q: 34, p: 147 } });
+term('knot', 'bowline', 'Bowline', 'Making a fixed loop at the end of a line that won\'t slip or jam, e.g. tying the jib sheets to the clew.', { ref: { q: 34, p: 144 }, hook: 'The rabbit comes out of the hole, around the tree, and back down the hole.' });
+term('knot', 'cleathitch', 'Cleat hitch', 'Securing a line to a cleat.', { ref: { q: 34, p: 145 } });
+term('knot', 'figure8', 'Figure eight', 'A stopper knot in the end of a line so it can\'t run out through a block or fairlead.', { ref: { q: 34, p: 145 } });
+term('knot', 'roundturn', 'Round turn & two half hitches', 'Securing a line to a ring or piling so it holds under load, e.g. a dock line tied to a ring.', { ref: { q: 34, p: 146 } });
+term('knot', 'clove', 'Clove hitch', 'A quick, temporary hitch around a rail or spar, e.g. hanging a fender from a lifeline.', { ref: { q: 34, p: 146 } });
+term('knot', 'sheetbend', 'Sheet bend', 'Joining the ends of two different lines together.', { ref: { h: 30 } });
+
+// Q28–30 — sound signals (handout p.28)
+term('sound', 's1', 'One short blast', '"I am altering my course to starboard" (I intend to leave you on my port side).', { ref: { q: 29, h: 28 }, hook: 'One blast, starboard (right). Two blasts, port (left).' });
+term('sound', 's2', 'Two short blasts', '"I am altering my course to port" (I intend to leave you on my starboard side).', { ref: { q: 30, h: 28 } });
+term('sound', 's3', 'Three short blasts', '"I am operating astern propulsion" (my engine is in reverse).', { ref: { h: 28 } });
+term('sound', 's5', 'Five or more short blasts', 'Danger or doubt: "I don\'t understand your intentions" or "you\'re not doing enough to avoid a collision".', { ref: { q: 28, h: 28 } });
+term('sound', 'sp', 'One prolonged blast', 'Entering a channel or approaching a blind bend (also a fog signal for power vessels underway).', { ref: { h: 28 } });
+
+const CARDS = [];
+const TERM_BY_ID = Object.fromEntries(TERMS.map(t => [t.id, t]));
+
+function distract(t, n, filter = () => true) {
+  const ok = x => x.id !== t.id && filter(x) && !(t.avoid || []).includes(x.id) && !(x.avoid || []).includes(t.id);
+  const same = shuffle(TERMS.filter(x => x.group === t.group && ok(x)));
+  const topic = shuffle(TERMS.filter(x => x.topic === t.topic && x.group !== t.group && ok(x)));
+  const rest = shuffle(TERMS.filter(x => x.topic !== t.topic && ok(x)));
+  return [...same, ...topic, ...rest].slice(0, n);
+}
+function buildTerm(t) {
+  const G = GROUPS[t.group];
+  const modes = ['def', 'rev'];
+  if (t.part) modes.push('pic', 'pic');
+  const mode = pick(modes);
+  const hook = t.hook;
+  const explain = `**${t.name}**: ${t.def}`;
+  if (mode === 'pic') {
+    const ds = distract(t, 3, x => !!x.part);
+    return { mode, prompt: md(`What is the **highlighted** part?`), svg: boatSide(t.part), explain, hook,
+      options: shuffle([{ t: t.name, ok: true }, ...ds.map(d => ({ t: d.name, ok: false }))]) };
+  }
+  const ds = distract(t, 3);
+  if (mode === 'rev') {
+    return { mode, prompt: `${esc(G.rev)}<blockquote>${md(t.def)}</blockquote>`, explain, hook,
+      options: shuffle([{ t: t.name, ok: true }, ...ds.map(d => ({ t: d.name, ok: false }))]) };
+  }
+  return { mode, prompt: md(t.ask || G.ask(t.name)), explain, hook,
+    options: shuffle([{ t: t.def, ok: true }, ...ds.map(d => ({ t: d.def, ok: false }))]) };
+}
+for (const t of TERMS) CARDS.push({ id: 't-' + t.id, topic: t.topic, ref: t.ref, build: () => buildTerm(t) });
+
+/* Fixed multiple choice: a = correct answer, w = wrong pool (3 are drawn) */
+function mc(o) {
+  CARDS.push({ id: o.id, topic: o.topic, ref: o.ref, build: () => ({
+    prompt: md(o.q), svg: typeof o.svg === 'function' ? o.svg() : o.svg, explain: o.explain, hook: o.hook,
+    options: shuffle([{ t: o.a, ok: true }, ...shuffle(o.w).slice(0, o.n || 3).map(t => ({ t, ok: false }))]) }) });
+}
+/* Select-all-that-apply */
+function multi(o) {
+  CARDS.push({ id: o.id, topic: o.topic, ref: o.ref, build: () => {
+    const a = shuffle(o.a).slice(0, o.na || 4), w = shuffle(o.w).slice(0, o.nw || 3);
+    return { multi: true, prompt: md(o.q), explain: o.explain, hook: o.hook,
+      options: shuffle([...a.map(t => ({ t, ok: true })), ...w.map(t => ({ t, ok: false }))]) };
+  } });
+}
+const gen = (id, topic, ref, build) => CARDS.push({ id, topic, ref, build });
+
+/* ---------- Wind & points of sail ---------- */
+const POS = [
+  { id: 'irons', name: 'In irons (no-go zone)', angle: 0, desc: 'Pointing straight into the wind. The sails luff and the boat stops.' },
+  { id: 'closehauled', name: 'Close-hauled', angle: 45, desc: 'As close to the wind as the boat can sail (about 45°), with the sails trimmed in tight.' },
+  { id: 'closereach', name: 'Close reach', angle: 65, desc: 'Between close-hauled and a beam reach (wind forward of the beam).' },
+  { id: 'beamreach', name: 'Beam reach', angle: 90, desc: 'The wind comes straight across the boat, at 90°.' },
+  { id: 'broadreach', name: 'Broad reach', angle: 135, desc: 'The wind comes from behind the beam, over the back corner (quarter) of the boat.' },
+  { id: 'run', name: 'Running', angle: 180, desc: 'The wind comes from directly behind, with the sails let all the way out.' },
+];
+for (const p of POS) {
+  gen('pos-' + p.id, 'wind', { q: 7, p: 32 }, () => {
+    const w = sceneRot(), s = pick([-1, 1]);
+    const jit = p.angle === 0 || p.angle === 180 ? 0 : rnd(9) - 4;
+    const h = w + s * (p.angle + jit);
+    const { svg } = scene([{ x: 0, y: 8, h, side: pick([-1, 1]) }], w, { label: 'One boat with a wind arrow' });
+    const others = shuffle(POS.filter(o => o.id !== p.id)).slice(0, 3);
+    return { prompt: md('What is this boat\'s **point of sail**?'), svg,
+      options: shuffle([{ t: p.name, ok: true }, ...others.map(o => ({ t: o.name, ok: false }))]),
+      explain: `**${p.name}**: ${p.desc}`,
+      hook: 'Going around from the wind: in irons, close-hauled, close reach, beam reach, broad reach, run.' };
+  });
+}
+gen('wind-tack', 'wind', { q: 8, p: 196 }, () => {
+  const w = sceneRot(), h = w + pick([-1, 1]) * (50 + rnd(115));
+  const tk = tackOf(h, w);
+  const { svg } = scene([{ x: 0, y: 8, h }], w, { label: 'One boat with a wind arrow' });
+  return { prompt: md('Which **tack** is this boat on?'), svg,
+    options: shuffle([{ t: 'Starboard tack', ok: tk === 'starboard' }, { t: 'Port tack', ok: tk === 'port' }]),
+    explain: `The wind is coming over the boat's **${tk}** side and the boom is out on the ${tk === 'port' ? 'starboard' : 'port'} side, so it is on **${tk} tack**.`,
+    hook: 'The tack is named for the side the wind comes over, which is the side opposite the boom.' };
+});
+gen('wind-ww', 'wind', { q: 6, p: 197 }, () => {
+  const w = sceneRot();
+  const hd = () => pick([-1, 1]) * (50 + rnd(90));
+  const lab = shuffle(['A', 'B']);
+  const top = { x: rnd(80) - 40, y: -48, h: hd(), label: lab[0] };
+  const bot = { x: rnd(80) - 40, y: 50, h: hd(), label: lab[1] };
+  if (Math.abs(top.x - bot.x) < 25) bot.x = top.x + (top.x > 0 ? -50 : 50);
+  const { svg } = scene([top, bot], w, { label: 'Two boats, A and B, with a wind arrow' });
+  const askWW = Math.random() < 0.6;
+  const ans = askWW ? top.label : bot.label;
+  return { prompt: md(`Which boat is the **${askWW ? 'windward' : 'leeward'}** boat?`), svg,
+    options: [{ t: 'Boat A', ok: ans === 'A' }, { t: 'Boat B', ok: ans === 'B' }, { t: 'Neither, they are equally upwind', ok: false }],
+    explain: `Boat **${top.label}** is closer to where the wind comes from, so it is **windward**. Boat **${bot.label}** is downwind of it, so it is **leeward**.`,
+    hook: 'Follow the wind arrow backwards: whichever boat it reaches first is to windward.' };
+});
+mc({ id: 'wind-jibe', topic: 'wind', ref: { q: 36, p: 94 },
+  q: 'On which point of sail is the **greatest danger** of an accidental jibe?',
+  a: 'Running (dead downwind), especially if you drift to sailing by-the-lee',
+  w: ['Close-hauled', 'Beam reach', 'Close reach', 'In irons, head to wind'],
+  explain: 'On a **run** the wind is almost behind the boat. A small wind shift or steering error puts the wind on the same side as the boom (by-the-lee), and the boom can slam across.',
+  hook: 'Wind behind you means the boom can come across. Steer carefully and watch the wind.' });
+mc({ id: 'wind-bylee', topic: 'wind', ref: { q: 35, p: 94 },
+  q: 'What is the main danger of **sailing by-the-lee**?',
+  a: 'An accidental jibe: the wind gets behind the mainsail and slams the boom across',
+  w: ['The boat will stall in irons', 'The jib will wrap around the forestay', 'The boat will heel too far to windward', 'You lose steerage way and drift sideways'],
+  explain: 'By-the-lee means the wind is coming over the **same side as the boom**. The wind can catch the back of the mainsail and throw the boom across the boat without warning.' });
+mc({ id: 'wind-telltale', topic: 'wind', ref: { q: 37, p: 86 },
+  q: 'Sailing **close-hauled** or on a **close reach**, what is the most precise way to judge sail trim and heading?',
+  a: 'Watch the jib telltales: both sides should stream back evenly',
+  w: ['Watch the wind vane at the top of the mast', 'Check how far the boat is heeling', 'Feel the wind on the back of your neck', 'Look at the whitecaps upwind', 'Check the compass heading'],
+  explain: 'The **telltales near the luff of the jib** show the airflow directly. If the windward one lifts or flutters, you\'re too close to the wind (or the sail is under-trimmed). If the leeward one flutters, you\'re too far off the wind (or over-trimmed).',
+  hook: 'Steer toward the telltale that is flapping.' });
+
+/* ---------- Sail handling terms ---------- */
+mc({ id: 'term-reef', topic: 'terms', ref: { q: 16, p: 107 },
+  q: 'What is **reefing**?',
+  a: 'Making the sail smaller (reducing sail area) when the wind is too strong',
+  w: ['Tying the boat to a mooring near a reef', 'Easing all sheets to slow the boat down', 'Raising a bigger sail in light winds', 'Turning the stern through the wind', 'Tightening the luff with the downhaul'],
+  explain: 'To **reef**, you lower the mainsail part way and secure it at a new tack and clew, so less sail is exposed to strong wind.' });
+mc({ id: 'term-weatherhelm', topic: 'terms', ref: { q: 18, p: 106 },
+  q: 'What is **weather helm**?',
+  a: 'The boat\'s tendency to turn up into the wind if you let go of the helm',
+  w: ['The boat\'s tendency to turn away from the wind if you let go of the helm', 'Difficulty steering because of rough weather', 'The helmsman\'s duty to keep checking the weather', 'Pushing the tiller to leeward to start a tack'],
+  explain: 'With **weather helm** you have to hold the tiller slightly to windward to sail straight. A little is good: if you let go, the boat heads up and slows down. Too much (usually from heeling too far) means it\'s time to depower or reef.',
+  hook: 'Weather helm turns the boat toward the weather (the wind). Lee helm turns it away.' });
+mc({ id: 'term-battens', topic: 'sail', ref: { q: 17, p: 25 },
+  q: 'Where are the **battens** (batten pockets) on a mainsail?',
+  a: 'Along the leech (aft edge)',
+  w: ['Along the luff (forward edge)', 'Along the foot (bottom edge)', 'Only at the head', 'At the tack and clew corners'],
+  explain: 'Batten pockets are sewn in along the **leech** to support the curved back edge (the roach) of the mainsail.' });
+
+/* ---------- Right of way ---------- */
+const ROW_OPTS = (ans, extra) => shuffle([{ t: 'Boat A', ok: ans === 'A' }, { t: 'Boat B', ok: ans === 'B' }]).concat(extra.map(t => ({ t, ok: false })));
+gen('row-overtake', 'row', { q: 9, p: 27 }, () => {
+  const w = sceneRot() === 0 ? 0 : pick([0, 90, 270]);
+  const lab = shuffle(['A', 'B']);
+  const dir = pick([90, -90]);
+  const sx = dir > 0 ? -70 : 70;
+  const { svg } = scene([
+    { x: sx, y: 8, h: dir, label: lab[0], caption: 'sailing fast', speed: true },
+    { x: -sx * 0.6, y: 8, h: dir, label: lab[1], type: 'motor', caption: 'motoring slowly' }], w,
+    { label: 'A fast sailboat coming up behind a slow motorboat' });
+  return { prompt: md('Which boat is the **give-way** boat?'), svg,
+    options: ROW_OPTS(lab[0], ['Neither, both turn to starboard']),
+    explain: `The sailboat (**${lab[0]}**) is **overtaking**. Any vessel overtaking another must keep clear, even a sailboat overtaking a powerboat (Rule 13).`,
+    hook: 'If you come up from behind, it\'s your job to stay clear.' };
+});
+gen('row-opposite', 'row', { q: 10, p: 128 }, () => {
+  const w = sceneRot(), M = [0, -28];
+  const hs = -(45 + rnd(40)), hp = 45 + rnd(25);
+  const st = (h, d) => [M[0] - d * dirv(h)[0], M[1] - d * dirv(h)[1]];
+  const [sx, sy] = st(hs, 82), [px, py] = st(hp, 82);
+  const lab = shuffle(['A', 'B']);
+  const { svg } = scene([
+    { x: sx, y: sy + 10, h: hs, label: lab[0], course: [M[0], M[1] + 10] },
+    { x: px, y: py + 10, h: hp, label: lab[1], course: [M[0], M[1] + 10] }], w,
+    { label: 'Two sailboats converging on opposite tacks' });
+  return { prompt: md('Which boat is the **give-way** boat?'), svg,
+    options: ROW_OPTS(lab[1], ['Neither, both turn to starboard']),
+    explain: `Boat **${lab[1]}** has the wind on its **port** side (boom to starboard), so it is on **port tack**. Boat **${lab[0]}** is on starboard tack. On opposite tacks, **port tack gives way to starboard tack**.`,
+    hook: 'Port tack gives way. The boom is on the "right", but you\'re in the wrong.' };
+});
+gen('row-same', 'row', { q: 11, p: 128 }, () => {
+  const w = sceneRot(), m = pick([1, -1]);
+  const M = [-50, -10];
+  const st = (h, d) => [M[0] - d * dirv(h)[0], M[1] - d * dirv(h)[1]];
+  const h1 = -(90 + rnd(15)), h2 = -(45 + rnd(10));
+  const [ax, ay] = st(h1, 85), [bx, by] = st(h2, 85);
+  const lab = shuffle(['A', 'B']);
+  const { svg } = scene([
+    { x: m * (ax + 10), y: ay - 15, h: m * h1, label: lab[0], course: [m * (M[0] + 10), M[1] - 15] },
+    { x: m * (bx + 10), y: by - 15, h: m * h2, label: lab[1], course: [m * (M[0] + 10), M[1] - 15] }], w,
+    { label: 'Two sailboats on the same tack converging' });
+  const tk = m > 0 ? 'starboard' : 'port';
+  return { prompt: md('Which boat is the **give-way** boat?'), svg,
+    options: ROW_OPTS(lab[0], ['Neither, the faster boat decides']),
+    explain: `Both boats are on **${tk} tack** (wind on the same side). Boat **${lab[0]}** is closer to the wind, so it is the **windward** boat and must keep clear of the **leeward** boat **${lab[1]}**.`,
+    hook: 'Same tack: windward boat keeps clear. The leeward boat can\'t steal its wind away.' };
+});
+gen('row-power', 'row', { q: 12, p: 126 }, () => {
+  const w = sceneRot(), m = pick([1, -1]);
+  const lab = shuffle(['A', 'B']);
+  const M = [m * 22, 22];
+  const { svg } = scene([
+    { x: M[0] - m * 92, y: M[1], h: m * 90, label: lab[0], caption: 'sailing', course: M },
+    { x: M[0], y: M[1] - 92, h: 180, label: lab[1], type: 'motor', caption: 'motoring', course: M }], w,
+    { label: 'A sailboat and a motorboat on crossing courses' });
+  return { prompt: md('Which boat is the **give-way** boat?'), svg,
+    options: ROW_OPTS(lab[1], ['Neither, the boat on the right has right of way']),
+    explain: `A **power-driven vessel gives way to a sailing vessel** (unless the sailboat is overtaking it, or the power vessel is restricted in its ability to maneuver). So the motorboat **${lab[1]}** keeps clear and the sailboat **${lab[0]}** stands on.`,
+    hook: 'Power gives way to sail, as long as the sailboat isn\'t overtaking.' };
+});
+const RULES = {
+  opposite: 'The port-tack boat keeps clear of the starboard-tack boat',
+  same: 'The windward boat keeps clear of the leeward boat',
+  power: 'The power-driven vessel keeps clear of the sailing vessel',
+  overtake: 'The overtaking vessel keeps clear, whatever type it is',
+};
+const RULE_WRONG = ['The boat on the right always has right of way', 'The larger boat always has right of way', 'The faster boat must keep clear', 'Both boats turn to starboard and pass port to port'];
+const ruleCard = (id, key, q, ref, explain) => mc({ id, topic: 'row', ref, q, a: RULES[key],
+  w: [...Object.entries(RULES).filter(([k]) => k !== key).map(([, v]) => v), ...RULE_WRONG], explain });
+ruleCard('rule-opposite', 'opposite', 'Two sailboats on **opposite tacks** are on a collision course. Which rule applies?', { q: 10, p: 128 },
+  'On **opposite tacks**, the boat on **port tack** (wind over its port side) gives way to the boat on **starboard tack**.');
+ruleCard('rule-same', 'same', 'Two sailboats on the **same tack** are on a collision course. Which rule applies?', { q: 11, p: 128 },
+  'With the wind on the **same side**, the **windward** boat keeps clear of the **leeward** boat.');
+ruleCard('rule-power', 'power', 'A **motorboat** and a **sailboat** (not overtaking) are on crossing courses. Which rule applies?', { q: 12, p: 126 },
+  'A **power-driven** vessel normally gives way to a **sailing** vessel.');
+ruleCard('rule-overtake', 'overtake', 'A **sailboat** is catching up to and **overtaking** a slow motorboat. Which rule applies?', { q: 9, p: 27 },
+  'Rule 13: **any vessel overtaking another keeps clear**, so here the sailboat gives way.');
+mc({ id: 'row-restricted', topic: 'row', ref: { q: 13, p: 126 },
+  q: 'What should a sailboat do when it meets a vessel **fishing**, **towing**, **restricted in its ability to maneuver**, or a **large ship in a confined channel**?',
+  a: 'Keep clear: give way early and obviously, and don\'t impede it',
+  w: ['Hold course, because sail has right of way over power', 'Sound five short blasts and stand on', 'Cross close ahead so the ship can see you', 'Pass between the tug and its tow', 'Stop and wait for the vessel to signal'],
+  explain: 'These vessels can\'t easily turn or stop, so they rank above sailboats. Stay well out of their way, and make your course change **early and obvious** so they can see what you are doing.' });
+mc({ id: 'row-lookout', topic: 'row', ref: { q: 33, p: 125 },
+  q: 'When does **Rule 5, the "Lookout" rule**, apply?',
+  a: 'At all times, to every vessel',
+  w: ['Only at night or in fog', 'Only to the give-way vessel', 'Only to vessels over 65 feet', 'Only when another vessel is in sight', 'Only when the engine is running'],
+  explain: 'Rule 5: "Every vessel shall **at all times** maintain a proper lookout by sight and hearing, as well as by all available means…" If you ignore it, you can be held at fault in a collision.' });
+mc({ id: 'row-standon', topic: 'row', ref: { h: 18 },
+  q: 'What must the **stand-on** vessel do?',
+  a: 'Hold its course and speed, but act to avoid a collision if the give-way vessel doesn\'t',
+  w: ['Turn away early to make room', 'Slow down and stop until the other vessel passes', 'Sound one prolonged blast and turn to port', 'Always turn to starboard'],
+  explain: 'The stand-on vessel keeps a **steady course and speed** so the give-way vessel can predict it. If the give-way vessel isn\'t taking action, the stand-on vessel must act to avoid a collision.' });
+mc({ id: 'row-motorsail', topic: 'row', ref: { h: 16 },
+  q: 'A sailboat has its sails up **and its engine running in gear**. Under the rules it is:',
+  a: 'A power-driven vessel',
+  w: ['A sailing vessel', 'A vessel restricted in its ability to maneuver', 'Whichever it chooses to signal', 'A vessel not under command'],
+  explain: 'If the engine is driving the boat, it is a **power-driven vessel** and follows the motorboat rules, sails up or not.' });
+
+/* ---------- Navigation aids ---------- */
+const CH_OPTS = ['Returning from sea (heading into the harbor or upstream)', 'Heading out to sea (leaving the harbor)', 'Crossing the channel from side to side', 'Leaving the channel to reach a hazard'];
+mc({ id: 'nav-return', topic: 'nav', ref: { q: 19, p: 141 }, svg: () => channelScene(true),
+  q: 'You see these buoys ahead (green **3** on your **left**, red **4** on your **right**). Which way are you traveling?',
+  a: CH_OPTS[0], w: CH_OPTS.slice(1),
+  explain: '**Red, Right, Returning.** With red even-numbered buoys on your right and green odd-numbered ones on your left, you are coming in from the sea.',
+  hook: 'Red, Right, Returning (from sea).' });
+mc({ id: 'nav-out', topic: 'nav', ref: { q: 19, p: 141 }, svg: () => channelScene(false),
+  q: 'You see these buoys ahead (red **4** on your **left**, green **3** on your **right**). Which way are you traveling?',
+  a: CH_OPTS[1], w: [CH_OPTS[0], CH_OPTS[2], CH_OPTS[3]],
+  explain: 'Red is on your **left**, so you are going the opposite way to "Red, Right, Returning". You are **heading out to sea**.',
+  hook: 'Red, Right, Returning. Reverse it when leaving.' });
+mc({ id: 'nav-rrr', topic: 'nav', ref: { q: 19, p: 141 },
+  q: 'When **returning from sea**, red even-numbered buoys should be on your:',
+  a: 'Right (starboard) side', w: ['Left (port) side', 'Either side, they mark the middle', 'Directly ahead'],
+  explain: 'Red, Right, Returning. Red marks the right side of the channel and green marks the left side.' });
+mc({ id: 'nav-junction', topic: 'nav', ref: { q: 20, p: 142 }, svg: junctionBuoy,
+  q: 'What does this buoy (red on top, a green band in the middle) represent?',
+  a: 'A junction (preferred-channel) mark: the channel splits here, and the preferred channel treats it as a red mark',
+  w: ['A safe-water mark: pass on either side', 'An isolated danger mark', 'A mooring buoy', 'A junction mark where the preferred channel treats it as a green mark', 'A no-wake speed zone'],
+  explain: 'Horizontally banded red and green buoys are **junction marks**. The **top color** shows the preferred (primary) channel. Red on top means: for the main channel, treat it like a red buoy (keep it on your right when returning).',
+  hook: 'Junction mark: read the top band.' });
+const REG = {
+  diamond: 'Danger: a hazard such as rocks or a shoal, so proceed with caution',
+  cross: 'Boats keep out: an exclusion area, such as a swim area',
+  circle: 'Controlled area: restrictions such as a speed limit or no wake',
+  square: 'Information, such as directions or the names of places',
+};
+const regCard = (id, sym, ref, explain) => mc({ id, topic: 'nav', ref, svg: () => regBuoy(sym),
+  q: 'What does this white buoy with **orange** markings represent?', a: REG[sym],
+  w: [...Object.entries(REG).filter(([k]) => k !== sym).map(([, v]) => v), 'Safe water: pass on either side'], explain,
+  hook: 'Diamond: danger. Diamond with a cross: keep out. Circle: controlled. Square: information.' });
+regCard('nav-diamond', 'diamond', { q: 21, p: 143 }, 'An open **diamond** warns of a **danger**. Boating is allowed, but be careful.');
+regCard('nav-cross', 'cross', { q: 21, p: 143 }, 'A **diamond with a cross** means boats must **keep out** (e.g. swim areas, dams).');
+regCard('nav-circle', 'circle', { q: 21, p: 143 }, 'A **circle** marks a **controlled area**, such as a speed limit or no-wake zone.');
+regCard('nav-square', 'square', { h: 27 }, 'A **square** gives **information**, such as directions or places.');
+
+/* ---------- Safety ---------- */
+mc({ id: 'safe-float-who', topic: 'safety', ref: { q: 14, p: 182 },
+  q: 'Who should you leave a **float plan** with?',
+  a: 'A responsible person on shore (a friend, relative, marina or sailing school)',
+  w: ['The U.S. Coast Guard', 'The harbor police', 'The state boating department', 'Nobody, you just keep it on board'],
+  explain: 'Leave the float plan with a **reliable person on shore** who will call the Coast Guard if you don\'t return on time. The **Coast Guard does not accept float plans**.',
+  hook: 'Float plan: give it to a friend, not the Feds.' });
+multi({ id: 'safe-float-what', topic: 'safety', ref: { q: 15, p: 182 },
+  q: 'What belongs in a **float plan**? Select **all** that apply.',
+  a: ['A description of the boat', 'Names (and contacts) of everyone aboard', 'Where you are going and your route', 'When you leave and when you expect to return', 'Communication and safety gear aboard (VHF, phone numbers)', 'What to do and whom to call if you are overdue'],
+  w: ['The boat\'s purchase price', 'Your boat insurance premium', 'A copy of your ASA logbook', 'The tide table for next month'],
+  na: 4, nw: 3,
+  explain: 'A float plan tells your shore contact **who** is aboard, **what** the boat looks like, **where** you are going, **when** you\'ll be back, what **equipment** you have, and **when to call for help**.' });
+multi({ id: 'safe-equip', topic: 'safety', ref: { q: 22, p: 134 },
+  q: 'Which items are **legally required** on a **25-foot sailboat with an outboard engine**? Select **all** that apply.',
+  a: ['A wearable life jacket (PFD) for each person aboard', 'A throwable flotation device (Type IV)', 'Visual distress signals (flares) for coastal waters', 'A sound-producing device (horn or whistle)', 'A fire extinguisher', 'Navigation lights (when underway at night or in restricted visibility)', 'State registration with numbers displayed on the bow'],
+  w: ['A first aid kit', 'A VHF radio', 'An anchor and rode', 'A bilge pump or bailer', 'A flashlight', 'A nautical chart', 'Fenders and dock lines'],
+  na: 4, nw: 3,
+  explain: 'USCG required: a **PFD for each person**, a **throwable (Type IV)**, **visual distress signals**, a **sound-producing device**, a **fire extinguisher** (any boat under 26 ft with an engine), **navigation lights** (if out at night), and **registration**. First aid kits, anchors, radios and so on are smart to carry but **not required**.',
+  hook: 'Wear it, throw it, flare it, blow it, spray it, light it, number it.' });
+
+/* ---------- Lights ---------- */
+const COLORS = ['Red', 'Green', 'White', 'Yellow'];
+mc({ id: 'light-port', topic: 'signals', ref: { q: 31, p: 138 }, q: 'What color is the **port** sidelight?', a: 'Red', w: COLORS.filter(c => c !== 'Red'),
+  explain: 'Port sidelight: **red**. Starboard sidelight: **green**. Stern light: **white**.', hook: 'Port wine is red. "Is there any red port left?"' });
+mc({ id: 'light-stbd', topic: 'signals', ref: { q: 31, p: 138 }, q: 'What color is the **starboard** sidelight?', a: 'Green', w: COLORS.filter(c => c !== 'Green'),
+  explain: 'Starboard sidelight: **green**. Port: red. Stern: white.' });
+mc({ id: 'light-stern', topic: 'signals', ref: { q: 31, p: 138 }, q: 'What color is the **stern** light?', a: 'White', w: ['Red', 'Green', 'Yellow', 'Red over white'],
+  explain: 'A **white** stern light shines aft. The sidelights are red (port) and green (starboard).' });
+mc({ id: 'light-masthead', topic: 'signals', ref: { q: 32, p: 138 },
+  q: 'Under **power**, what extra light must a sailboat show, **where**, and which way does it **face**?',
+  a: 'White, on the front of the mast (below the top), shining forward',
+  w: ['White, at the very top of the mast, shining all around', 'Yellow, on the stern, shining aft', 'Red, at the masthead, shining forward', 'Green, on the bow, shining forward', 'White, on the boom, shining down'],
+  explain: 'Under engine, add a **white masthead ("steaming") light**. It sits on the **forward side of the mast**, usually near the spreaders, and shines **forward**. The all-around white light at the very top is the **anchor** light.' });
+mc({ id: 'light-seeRed', topic: 'signals', ref: { h: 28 },
+  q: 'At night you see only a **red** light on another sailboat. Which side of it are you looking at?',
+  a: 'Its port side', w: ['Its starboard side', 'Its stern', 'Its bow, head on'],
+  explain: 'Red is the **port** sidelight. If you can only see red, you are looking at the boat\'s port side.' });
+
+const CARD_BY_ID = Object.fromEntries(CARDS.map(c => [c.id, c]));
+
+/* ================================================================
+   Persistence + scheduler (Leitner-style, turn-based with day backstop)
+   ================================================================ */
+const KEY = 'bks-trainer-v1';
+const DEFAULTS = { cards: {}, turn: 0, xp: 0, streak: 0, lastDay: null, bestRun: 0,
+  settings: { theme: 'auto', sound: false, scale: 1, sprint: 10, topics: TOPICS.map(t => t.id) } };
+function load() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) { d = null; }
+  const s = Object.assign(structuredClone(DEFAULTS), d || {});
+  s.settings = Object.assign(structuredClone(DEFAULTS.settings), (d && d.settings) || {});
+  return s;
+}
+let S = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ } }
+
+const TURN_GAP = [3, 6, 12, 25, 50, 100, 200];
+const DAY_GAP = [0, 0, 1, 3, 7, 14, 30];
+const MASTERED = 4;
+const st = id => S.cards[id];
+function isDue(s) {
+  if (!s) return false;
+  if (S.turn >= s.due) return true;
+  return s.box >= 2 && (Date.now() - s.last) / DAY >= DAY_GAP[s.box];
+}
+const activeCards = () => CARDS.filter(c => S.settings.topics.includes(c.topic));
+
+function pickNext(pool, lastId) {
+  const seen = pool.filter(c => st(c.id) && c.id !== lastId);
+  const unseen = pool.filter(c => !st(c.id));
+  const due = seen.filter(c => isDue(st(c.id)));
+  const struggling = due.filter(c => st(c.id).box === 0);
+  const takeNew = unseen.length && !struggling.length && (due.length === 0 || Math.random() < 0.4);
+  if (due.length && !takeNew) {
+    const ranked = due.map(c => ({ c, k: st(c.id).box * 10 - (S.turn - st(c.id).due) + Math.random() * 4 })).sort((a, b) => a.k - b.k);
+    return ranked[0].c;
+  }
+  if (unseen.length) {
+    const recent = new Set(sess.recentTopics.slice(-2));
+    const fresh = unseen.filter(c => !recent.has(c.topic));
+    return pick(fresh.length ? fresh : unseen);
+  }
+  const rest = (seen.length ? seen : pool).slice().sort((a, b) => (st(a.id)?.due ?? 0) - (st(b.id)?.due ?? 0) + (Math.random() - .5) * 6);
+  return rest[0];
+}
+/* g: 0 again, 1 hard, 2 good, 3 easy */
+function grade(id, g) {
+  S.turn++;
+  const s = S.cards[id] || { box: 0, due: 0, seen: 0, right: 0, wrong: 0, last: 0 };
+  s.seen++; s.last = Date.now();
+  if (g === 0) { s.wrong++; s.box = 0; s.due = S.turn + TURN_GAP[0]; }
+  else {
+    s.right++;
+    if (g === 1) s.box = Math.max(1, s.box - 1);
+    if (g === 2) s.box = Math.min(6, s.box + 1);
+    if (g === 3) s.box = Math.min(6, s.box + 2);
+    s.due = S.turn + Math.round(TURN_GAP[s.box] * (g === 3 ? 1.5 : 1));
+  }
+  S.cards[id] = s;
+}
+function topicStats(tid) {
+  const cs = CARDS.filter(c => c.topic === tid);
+  let m = 0, l = 0;
+  for (const c of cs) { const s = st(c.id); if (!s) continue; if (s.box >= MASTERED) m++; else l++; }
+  return { total: cs.length, m, l };
+}
+function touchStreak() {
+  const today = new Date().toDateString();
+  if (S.lastDay === today) return;
+  const y = new Date(Date.now() - DAY).toDateString();
+  S.streak = S.lastDay === y ? S.streak + 1 : 1;
+  S.lastDay = today;
+}
+
+/* ================================================================
+   Feedback effects
+   ================================================================ */
+let actx = null;
+function tone(ok) {
+  if (!S.settings.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const notes = ok ? [660, 880] : [300, 240];
+    notes.forEach((f, i) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      const t = actx.currentTime + i * 0.09;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.12, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      o.connect(g).connect(actx.destination); o.start(t); o.stop(t + 0.2);
+    });
+  } catch (e) { /* audio unavailable */ }
+}
+function toast(msg) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 2300); }
+function xpFloat(n) { const d = document.createElement('div'); d.className = 'xp'; d.textContent = `+${n} XP`; document.body.appendChild(d); setTimeout(() => d.remove(), 1000); }
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.createElement('div'); box.className = 'confetti';
+  const cols = ['#2457d6', '#e8830c', '#1d8549', '#d2372b', '#f2c230'];
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement('i');
+    p.style.left = Math.random() * 100 + 'vw'; p.style.background = pick(cols);
+    p.style.animationDelay = Math.random() * 0.3 + 's'; p.style.animationDuration = 1 + Math.random() * 0.8 + 's';
+    box.appendChild(p);
+  }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 2200);
+}
+function speak(text) {
+  if (!('speechSynthesis' in window)) return toast('Read-aloud is not supported in this browser');
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text); u.rate = 0.95; speechSynthesis.speak(u);
+}
+
+/* ================================================================
+   Views
+   ================================================================ */
+const app = $('#app'), bar = $('#bar');
+let view = 'home', sess = null, cur = null;
+
+function applySettings() {
+  const r = document.documentElement;
+  if (S.settings.theme === 'auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', S.settings.theme);
+  r.style.setProperty('--scale', S.settings.scale);
+}
+const refText = r => {
+  if (!r) return '';
+  const parts = [];
+  if (r.q) parts.push(`Review question ${r.q}`); else parts.push('Extra');
+  if (r.p) parts.push(`Sailing Made Easy p.${r.p}`);
+  if (r.h) parts.push(`BKS handout p.${r.h}`);
+  return parts.join(' · ');
+};
+const logo = `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path d="M30 6 L30 46 L10 46 Z" fill="var(--primary)"/><path d="M34 12 L34 46 L52 46 Z" fill="var(--accent)"/><path d="M6 50 L58 50 L50 58 L14 58 Z" fill="var(--ink)"/></svg>`;
+
+function header() {
+  return `<header class="app"><h1>${logo} BKS Exam Trainer</h1>
+    <span class="pill" title="Days in a row">🔥 ${S.streak}</span>
+    <span class="pill hide-sm" title="Experience points">⭐ ${S.xp}</span>
+    <button class="iconbtn" data-act="settings" aria-label="Settings">⚙️</button></header>`;
+}
+
+function renderHome() {
+  view = 'home'; bar.innerHTML = '';
+  const pool = activeCards();
+  const due = pool.filter(c => isDue(st(c.id))).length;
+  const fresh = pool.filter(c => !st(c.id)).length;
+  const mastered = CARDS.filter(c => (st(c.id)?.box ?? -1) >= MASTERED).length;
+  const sp = S.settings.sprint;
+  app.innerHTML = `${header()}
+  <section class="card hero">
+    <h2>Ready for a short round?</h2>
+    <p>Answer one question at a time. The ones you miss come back soon, and the easy ones wait longer.</p>
+    <div class="stats">
+      <div class="stat"><b>${mastered}<small style="font-size:.6em;color:var(--muted)">/${CARDS.length}</small></b><span>mastered</span></div>
+      <div class="stat"><b>${due}</b><span>due for review</span></div>
+      <div class="stat"><b>${fresh}</b><span>not seen yet</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <span style="color:var(--ink-2);font-size:.9rem">Round length</span>
+      <div class="seg" role="group" aria-label="Round length">
+        ${[5, 10, 20].map(n => `<button data-act="sprint" data-n="${n}" aria-pressed="${sp === n}">${n}</button>`).join('')}
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn primary" data-act="practice" ${pool.length ? '' : 'disabled'}>▶ Start ${sp}-card round <span class="kbd">⏎</span></button>
+      <button class="btn secondary" data-act="exam" ${pool.length ? '' : 'disabled'}>📝 Mock exam (25)</button>
+    </div>
+  </section>
+  <div class="section-title">Topics: tap to include or exclude</div>
+  <div class="topics">
+    ${TOPICS.map(t => { const s = topicStats(t.id); const on = S.settings.topics.includes(t.id);
+      return `<button class="topic" data-act="topic" data-id="${t.id}" aria-pressed="${on}">
+        <span class="ic" aria-hidden="true">${t.icon}</span>
+        <span><span class="nm">${t.name}</span>
+          <span class="bar"><i class="m" style="width:${s.m / s.total * 100}%"></i><i class="l" style="width:${s.l / s.total * 100}%"></i></span></span>
+        <span style="display:flex;align-items:center;gap:10px"><span class="ct">${s.m}/${s.total}</span><span class="check" aria-hidden="true">${on ? '✓' : ''}</span></span>
+      </button>`; }).join('')}
+  </div>
+  <div class="legend"><span><i style="background:var(--good)"></i>mastered</span><span><i style="background:var(--accent)"></i>learning</span><span><i style="background:var(--surface-2)"></i>new</span></div>
+  <details class="help card" style="margin-top:20px">
+    <summary>How this works & focus tips</summary>
+    <ul>
+      <li><b>Short rounds.</b> 5 to 10 questions, then a short break. Stopping often keeps you focused.</li>
+      <li><b>Spaced repetition.</b> If you miss a question, it comes back within a few cards. If you rate it <i>Easy</i>, you won't see it for a while.</li>
+      <li><b>Rate honestly.</b> If you guessed right, press <i>Hard</i> so the question comes back sooner.</li>
+      <li><b>Keyboard:</b> <span class="kbd">1</span>–<span class="kbd">7</span> to pick an answer · <span class="kbd">H</span> hint (removes two wrong answers) · <span class="kbd">S</span> show the answer · <span class="kbd">⏎</span> continue. After you answer: <span class="kbd">1</span> Hard · <span class="kbd">2</span>/<span class="kbd">⏎</span> Good · <span class="kbd">3</span> Easy.</li>
+      <li><b>Mock exam:</b> 25 random questions and no hints. You need 80% to pass, like the real ASA test.</li>
+      <li>Diagrams change every time (wind direction, labels, mirroring), so you learn the rule and not the picture.</li>
+      <li>Your progress is saved in this browser only.</li>
+    </ul>
+  </details>`;
+}
+
+function startPractice() {
+  touchStreak(); save();
+  sess = { mode: 'practice', total: S.settings.sprint, done: 0, right: 0, marks: [], lastId: null, recentTopics: [], start: Date.now(), run: 0, xp: 0, promoted: 0 };
+  next();
+}
+function startExam() {
+  touchStreak(); save();
+  const pool = shuffle(activeCards());
+  const n = Math.min(25, pool.length);
+  sess = { mode: 'exam', items: pool.slice(0, n), total: n, done: 0, right: 0, marks: [], answers: [], recentTopics: [], start: Date.now() };
+  next();
+}
+function next() {
+  if (sess.done >= sess.total) return sess.mode === 'exam' ? renderExamResult() : renderSummary();
+  const card = sess.mode === 'exam' ? sess.items[sess.done] : pickNext(activeCards(), sess.lastId);
+  const q = card.build();
+  cur = { card, q, answered: false, sel: new Set(), gone: new Set(), hinted: false, revealed: false, ok: null };
+  sess.lastId = card.id; sess.recentTopics.push(card.topic);
+  renderCard();
+}
+
+function segs() {
+  return Array.from({ length: sess.total }, (_, i) => {
+    const m = sess.marks[i]; return `<i class="${m === true ? 'ok' : m === false ? 'no' : i === sess.done ? 'cur' : ''}"></i>`;
+  }).join('');
+}
+function renderCard() {
+  view = 'card';
+  const { card, q } = cur, T = TOPIC[card.topic];
+  const exam = sess.mode === 'exam';
+  app.innerHTML = `
+  <div class="topbar">
+    <button class="iconbtn" data-act="quit" aria-label="End round">✕</button>
+    <div class="segs" aria-hidden="true">${segs()}</div>
+    <span class="count">${sess.done + 1} / ${sess.total}</span>
+  </div>
+  <article class="card" id="qcard" tabindex="-1" aria-labelledby="qprompt">
+    <div class="qhead"><span class="chip">${T.icon} ${T.name}</span>
+      <span>${exam ? '<span class="chip">📝 Exam</span>' : ''}
+      <button class="iconbtn" data-act="speak" aria-label="Read question aloud" title="Read aloud">🔊</button></span></div>
+    <h2 class="prompt" id="qprompt">${q.prompt}</h2>
+    ${q.svg ? `<div class="figure">${q.svg}</div>` : ''}
+    ${q.multi ? `<div class="multi-note">☑ Select all that apply, then press Check</div>` : ''}
+    <div class="opts" role="group" aria-label="Answer options">
+      ${q.options.map((o, i) => `<button class="opt" data-act="opt" data-i="${i}" aria-pressed="false"><span class="key">${i + 1}</span><span class="txt">${md(o.t)}</span><span class="mark" aria-hidden="true"></span></button>`).join('')}
+    </div>
+    <div id="fb" aria-live="polite"></div>
+  </article>`;
+  ringHighlight();
+  renderBar();
+  $('#qcard').focus({ preventScroll: true });
+  window.scrollTo({ top: 0 });
+}
+function ringHighlight() {
+  const el = $('#qcard .dia .hl'); if (!el) return;
+  const b = el.getBBox(); const size = Math.max(b.width, b.height);
+  if (size > 70) return;
+  const r = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  r.setAttribute('class', 'ring'); r.setAttribute('cx', b.x + b.width / 2); r.setAttribute('cy', b.y + b.height / 2); r.setAttribute('r', size / 2 + 12);
+  el.ownerSVGElement.appendChild(r);
+}
+function renderBar() {
+  const exam = sess.mode === 'exam', q = cur.q;
+  let html = '';
+  if (!cur.answered) {
+    if (exam) {
+      html = `<button class="btn primary" data-act="submit" ${cur.sel.size ? '' : 'disabled'}>${sess.done + 1 === sess.total ? 'Finish' : 'Next'} <span class="kbd">⏎</span></button>`;
+    } else if (q.multi) {
+      html = `<button class="btn ghost" data-act="reveal">Show answer <span class="kbd">S</span></button>
+        <button class="btn primary" data-act="submit" ${cur.sel.size ? '' : 'disabled'}>Check <span class="kbd">⏎</span></button>`;
+    } else {
+      const canHint = !cur.hinted && q.options.length >= 4;
+      html = `<button class="btn ghost" data-act="hint" ${canHint ? '' : 'disabled'}>💡 Hint <span class="kbd">H</span></button>
+        <button class="btn ghost" data-act="reveal">Show answer <span class="kbd">S</span></button>`;
+    }
+  } else if (cur.ok) {
+    html = `<button class="btn hard" data-act="rate" data-g="1"><span class="stack">Hard <span class="sub">guessed · soon <span class="kbd">1</span></span></span></button>
+      <button class="btn primary" data-act="rate" data-g="2" ${cur.hinted ? 'disabled' : ''}><span class="stack">Good <span class="sub">later <span class="kbd">2</span></span></span></button>
+      <button class="btn easy" data-act="rate" data-g="3" ${cur.hinted ? 'disabled' : ''}><span class="stack">Easy <span class="sub">much later <span class="kbd">3</span></span></span></button>`;
+  } else {
+    html = `<button class="btn primary" data-act="rate" data-g="0">Got it, continue <span class="kbd">⏎</span></button>`;
+  }
+  bar.innerHTML = `<div class="actionbar"><div class="inner">${html}</div></div>`;
+}
+
+function choose(i) {
+  if (view !== 'card' || cur.answered) return;
+  const o = cur.q.options[i]; if (!o || cur.gone.has(i)) return;
+  if (cur.q.multi) { cur.sel.has(i) ? cur.sel.delete(i) : cur.sel.add(i); }
+  else if (sess.mode === 'exam') { cur.sel = new Set([i]); }
+  else { cur.sel = new Set([i]); return evaluate(); }
+  document.querySelectorAll('.opt').forEach((b, j) => { b.classList.toggle('sel', cur.sel.has(j)); b.setAttribute('aria-pressed', cur.sel.has(j)); });
+  renderBar();
+}
+function isCorrect() {
+  return cur.q.options.every((o, i) => o.ok === cur.sel.has(i));
+}
+function evaluate() {
+  if (cur.answered) return;
+  if (sess.mode === 'exam') {
+    const ok = isCorrect();
+    sess.answers.push({ card: cur.card, q: cur.q, sel: [...cur.sel], ok });
+    sess.marks[sess.done] = null; if (ok) sess.right++;
+    sess.done++;
+    return next();
+  }
+  cur.answered = true; cur.ok = !cur.revealed && isCorrect();
+  document.querySelectorAll('.opt').forEach((b, j) => {
+    const o = cur.q.options[j], s = cur.sel.has(j);
+    b.disabled = true;
+    b.classList.remove('sel');
+    if (o.ok && s) { b.classList.add('ok'); b.querySelector('.mark').textContent = '✓'; }
+    else if (o.ok) { b.classList.add(cur.q.multi || cur.revealed ? 'missed' : 'ok'); b.classList.add('ok'); b.querySelector('.mark').textContent = '✓'; }
+    else if (s) { b.classList.add('no'); b.querySelector('.mark').textContent = '✗'; }
+  });
+  sess.marks[sess.done] = cur.ok;
+  if (cur.ok) {
+    sess.run++; sess.right++;
+    const gain = cur.hinted ? 5 : 10; S.xp += gain; sess.xp += gain; xpFloat(gain);
+    if (sess.run > S.bestRun) S.bestRun = sess.run;
+    if (sess.run && sess.run % 5 === 0) { toast(`🔥 ${sess.run} in a row!`); confetti(); }
+  } else { sess.run = 0; S.xp += 2; sess.xp += 2; }
+  tone(cur.ok);
+  const praise = pick(['Nice!', 'Correct!', 'Spot on!', 'Yes!', 'Well sailed!']);
+  const title = cur.ok ? `✓ ${praise}` : cur.revealed ? 'Here\'s the answer' : 'Not quite. Here\'s the key idea:';
+  $('#fb').innerHTML = `<div class="fb ${cur.ok ? 'good' : 'bad'}"><h3>${title}</h3>
+    <p>${md(cur.q.explain || '')}</p>
+    ${cur.q.hook ? `<div class="hook">💡 <b>Memory hook:</b> ${md(cur.q.hook)}</div>` : ''}
+    <div class="ref">📘 ${esc(refText(cur.card.ref))}${cur.ok ? '' : ' · this card will come back in a few questions'}</div></div>`;
+  $('.segs').innerHTML = segs();
+  renderBar();
+  setTimeout(() => $('#fb')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' }), 60);
+  save();
+}
+function hint() {
+  if (cur.answered || cur.hinted || cur.q.multi || sess.mode === 'exam') return;
+  const wrong = shuffle(cur.q.options.map((o, i) => (!o.ok ? i : -1)).filter(i => i >= 0)).slice(0, 2);
+  wrong.forEach(i => { cur.gone.add(i); const b = document.querySelectorAll('.opt')[i]; b.classList.add('gone'); b.disabled = true; });
+  cur.hinted = true; renderBar();
+}
+function reveal() {
+  if (cur.answered || sess.mode === 'exam') return;
+  cur.revealed = true; evaluate();
+}
+function rate(g) {
+  if (!cur.answered) return;
+  const before = st(cur.card.id)?.box ?? -1;
+  grade(cur.card.id, g);
+  if (before < MASTERED && st(cur.card.id).box >= MASTERED) sess.promoted++;
+  save();
+  sess.done++;
+  next();
+}
+
+function renderSummary() {
+  view = 'summary';
+  const pct = Math.round(sess.right / sess.total * 100);
+  const mins = Math.max(1, Math.round((Date.now() - sess.start) / 60000));
+  const msg = pct >= 90 ? 'Outstanding focus!' : pct >= 70 ? 'Solid round!' : pct >= 50 ? 'Good effort. The ones you missed will come back.' : 'Tough round, and that\'s how you learn. The ones you missed are queued up.';
+  if (pct >= 80) confetti();
+  save();
+  app.innerHTML = `${header()}
+  <section class="card center">
+    <div class="big">${pct >= 80 ? '🏆' : pct >= 50 ? '⛵' : '🌊'}</div>
+    <h2 style="margin:0">${sess.right} / ${sess.total} correct</h2>
+    <p style="color:var(--ink-2)">${msg}</p>
+    <div class="segs" style="margin:10px 0 16px" aria-hidden="true">${segs()}</div>
+    <div class="stats">
+      <div class="stat"><b>+${sess.xp}</b><span>XP earned</span></div>
+      <div class="stat"><b>${sess.promoted}</b><span>newly mastered</span></div>
+      <div class="stat"><b>${mins}m</b><span>focused</span></div>
+    </div>
+    ${mins >= 15 ? '<p style="color:var(--accent);font-weight:700">You\'ve been at it a while. A short break now will help you remember more.</p>' : ''}
+    <div class="row">
+      <button class="btn primary" data-act="practice">▶ Another round <span class="kbd">⏎</span></button>
+      <button class="btn secondary" data-act="break">🧘 1-minute break</button>
+    </div>
+    <button class="btn ghost block" data-act="home" style="margin-top:8px">Back to topics</button>
+  </section>`;
+  bar.innerHTML = '';
+}
+let breakTimer = null;
+function renderBreak() {
+  view = 'break';
+  let left = 60;
+  app.innerHTML = `${header()}<section class="card center">
+    <h2 style="margin:0">Micro-break</h2>
+    <p style="color:var(--ink-2)">Look away from the screen. Breathe in as the circle grows and out as it shrinks. Roll your shoulders.</p>
+    <div class="breathe" aria-hidden="true"></div>
+    <p><b id="left">60</b> seconds</p>
+    <button class="btn primary block" data-act="practice">I'm back, next round</button>
+    <button class="btn ghost block" data-act="home" style="margin-top:8px">Back to topics</button></section>`;
+  clearInterval(breakTimer);
+  breakTimer = setInterval(() => {
+    left--; const el = $('#left'); if (!el || view !== 'break') return clearInterval(breakTimer);
+    el.textContent = left;
+    if (left <= 0) { clearInterval(breakTimer); el.parentElement.innerHTML = '<b>Break done. Ready when you are.</b>'; tone(true); }
+  }, 1000);
+}
+function renderExamResult() {
+  view = 'result';
+  const pct = Math.round(sess.right / sess.total * 100), pass = pct >= 80;
+  for (const a of sess.answers) if (!a.ok) { const s = st(a.card.id); S.turn++; S.cards[a.card.id] = { ...(s || { seen: 0, right: 0, wrong: 0 }), box: 0, due: S.turn, last: Date.now(), seen: (s?.seen || 0) + 1, wrong: (s?.wrong || 0) + 1 }; }
+  S.xp += sess.right * 5; save();
+  if (pass) confetti();
+  const missed = sess.answers.filter(a => !a.ok);
+  app.innerHTML = `${header()}
+  <section class="card center">
+    <div class="big">${pass ? '🎉' : '📚'}</div>
+    <h2 style="margin:0">${pct}%: ${pass ? 'Pass!' : 'Not yet'}</h2>
+    <p style="color:var(--ink-2)">${sess.right} of ${sess.total} correct. You need 80% to pass. ${pass ? 'You\'re ready for the written exam.' : 'The questions you missed are now first in line for practice.'}</p>
+    <div class="row"><button class="btn primary" data-act="practice">▶ Practice missed questions</button><button class="btn secondary" data-act="home">Home</button></div>
+  </section>
+  ${missed.length ? `<div class="section-title">Review: ${missed.length} missed</div><section class="card">
+    ${missed.map(a => `<div class="miss"><div class="q">${strip(a.q.prompt)}</div>
+      ${a.q.svg ? `<div class="figure" style="max-width:320px;margin-top:8px">${a.q.svg}</div>` : ''}
+      <div class="y">Your answer: ${a.sel.map(i => esc(a.q.options[i].t)).join('; ') || '(none)'}</div>
+      <div class="a">✓ ${a.q.options.filter(o => o.ok).map(o => esc(o.t)).join('; ')}</div>
+      <p style="margin:6px 0 0;color:var(--ink-2)">${md(a.q.explain || '')}</p></div>`).join('')}
+  </section>` : ''}`;
+  bar.innerHTML = '';
+}
+
+/* Settings dialog */
+const dlg = $('#settings');
+function openSettings() {
+  const s = S.settings;
+  dlg.innerHTML = `<h2>Settings</h2><div class="settings">
+    <label>Theme <span class="seg">${['auto', 'light', 'dark'].map(t => `<button data-act="theme" data-v="${t}" aria-pressed="${s.theme === t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join('')}</span></label>
+    <label>Text size <span class="seg">${[[0.9, 'A−'], [1, 'A'], [1.15, 'A+'], [1.3, 'A++']].map(([v, l]) => `<button data-act="scale" data-v="${v}" aria-pressed="${s.scale === v}">${l}</button>`).join('')}</span></label>
+    <label>Sound feedback <span class="seg">${[[false, 'Off'], [true, 'On']].map(([v, l]) => `<button data-act="sound" data-v="${v}" aria-pressed="${s.sound === v}">${l}</button>`).join('')}</span></label>
+    <label>Reset all progress <button class="btn secondary" data-act="reset" style="min-height:40px;padding:6px 12px">Reset</button></label>
+  </div><button class="btn primary block" data-act="closeSettings" style="margin-top:14px">Done</button>`;
+  if (!dlg.open) dlg.showModal();
+}
+
+/* ================================================================
+   Events
+   ================================================================ */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+  const a = b.dataset.act;
+  switch (a) {
+    case 'practice': return startPractice();
+    case 'exam': return startExam();
+    case 'home': clearInterval(breakTimer); return renderHome();
+    case 'break': return renderBreak();
+    case 'sprint': S.settings.sprint = +b.dataset.n; save(); return renderHome();
+    case 'topic': {
+      const id = b.dataset.id, t = S.settings.topics;
+      S.settings.topics = t.includes(id) ? t.filter(x => x !== id) : [...t, id];
+      save(); return renderHome();
+    }
+    case 'opt': return choose(+b.dataset.i);
+    case 'submit': return cur.sel.size && evaluate();
+    case 'hint': return hint();
+    case 'reveal': return reveal();
+    case 'rate': return rate(+b.dataset.g);
+    case 'speak': return speak(strip(cur.q.prompt) + '. ' + cur.q.options.map((o, i) => `Option ${i + 1}: ${o.t}`).join('. '));
+    case 'quit':
+      if (sess.mode === 'practice' && sess.done > 0) { sess.total = sess.done; return renderSummary(); }
+      return renderHome();
+    case 'settings': return openSettings();
+    case 'closeSettings': dlg.close(); return view === 'home' ? renderHome() : null;
+    case 'theme': S.settings.theme = b.dataset.v; break;
+    case 'scale': S.settings.scale = +b.dataset.v; break;
+    case 'sound': S.settings.sound = b.dataset.v === 'true'; if (S.settings.sound) tone(true); break;
+    case 'reset':
+      if (b.dataset.confirm) { const keep = S.settings; S = structuredClone(DEFAULTS); S.settings = keep; save(); dlg.close(); return renderHome(); }
+      b.dataset.confirm = '1'; b.textContent = 'Tap again to confirm'; return;
+  }
+  if (['theme', 'scale', 'sound'].includes(a)) { save(); applySettings(); openSettings(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || dlg.open) return;
+  const k = e.key.toLowerCase();
+  const ae = document.activeElement;
+  const onButton = ae && ae.tagName === 'BUTTON' && !ae.classList.contains('opt');
+  if (k === 'enter' && onButton) return;
+  if (view === 'home' && k === 'enter') { e.preventDefault(); return activeCards().length && startPractice(); }
+  if (view === 'summary' && k === 'enter') { e.preventDefault(); return startPractice(); }
+  if (view !== 'card') return;
+  if (!cur.answered) {
+    if (/^[1-9]$/.test(k)) { e.preventDefault(); return choose(+k - 1); }
+    if (k === 'h') return hint();
+    if (k === 's') return reveal();
+    if (k === 'enter' && cur.sel.size && (cur.q.multi || sess.mode === 'exam')) { e.preventDefault(); return evaluate(); }
+  } else {
+    if (!cur.ok && (k === 'enter' || k === ' ')) { e.preventDefault(); return rate(0); }
+    if (cur.ok) {
+      if (k === '1') return rate(1);
+      if (!cur.hinted && (k === '2' || k === 'enter' || k === ' ')) { e.preventDefault(); return rate(2); }
+      if (cur.hinted && (k === 'enter' || k === ' ')) { e.preventDefault(); return rate(1); }
+      if (!cur.hinted && k === '3') return rate(3);
+    }
+  }
+});
+
+applySettings();
+renderHome();
+</script>
+</body>
+</html>

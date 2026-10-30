@@ -608,7 +608,7 @@ for (const p of POS) {
   gen('pos-' + p.id, 'wind', { q: 7, p: 32 }, () => {
     const w = sceneRot(), s = pick([-1, 1]);
     const jit = p.angle === 0 || p.angle === 180 ? 0 : rnd(9) - 4;
-    const h = w + s * (p.angle + jit);
+    const h = s * (p.angle + jit);
     const { svg } = scene([{ x: 0, y: 8, h, side: pick([-1, 1]) }], w, { label: 'One boat with a wind arrow' });
     const others = shuffle(POS.filter(o => o.id !== p.id)).slice(0, 3);
     return { prompt: md('What is this boat\'s **point of sail**?'), svg,
@@ -618,8 +618,8 @@ for (const p of POS) {
   });
 }
 gen('wind-tack', 'wind', { q: 8, p: 196 }, () => {
-  const w = sceneRot(), h = w + pick([-1, 1]) * (50 + rnd(115));
-  const tk = tackOf(h, w);
+  const w = sceneRot(), h = pick([-1, 1]) * (50 + rnd(115));
+  const tk = tackOf(h, 0);
   const { svg } = scene([{ x: 0, y: 8, h }], w, { label: 'One boat with a wind arrow' });
   return { prompt: md('Which **tack** is this boat on?'), svg,
     options: shuffle([{ t: 'Starboard tack', ok: tk === 'starboard' }, { t: 'Port tack', ok: tk === 'port' }]),
